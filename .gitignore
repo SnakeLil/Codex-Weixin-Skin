@@ -1,0 +1,17 @@
+**/.DS_Store
+*.log
+*.tmp
+.DS_Store
+.idea/
+.vscode/
+README.preview.html
+docs/readme-preview.html
+release/
+runtime/
+
+# Local WeChat reference screenshots are not redistributable project assets.
+weixin-screenshot/
+
+# local agent context
+AGENTS.md
+TASK_PROGRESS.md

@@ -1,0 +1,1132 @@
+/* ===========================================================================
+ * Codex WeChat Skin — weixin-skin.css
+ * A flat, clean WeChat (微信) makeover for the Codex desktop app.
+ *
+ * Colour model
+ * ------------
+ * The injector rewrites the ACCENT tokens (--wx-green / --wx-lime / --wx-cyan /
+ * --wx-purple and their *-rgb triplets) inline on :root from theme.json, so the
+ * WeChat green stays customisable. The NEUTRAL surfaces (chat background, list
+ * panel, bubbles, dividers) are owned here as --wxs-* variables keyed on
+ * [data-weixin-shell] so light / dark render independently and never inherit an
+ * image-derived palette. Everything is scoped under :root.codex-weixin-skin.
+ * =========================================================================== */
+
+:root.codex-weixin-skin {
+  color-scheme: light !important;
+
+  /* --- accent (WeChat green), overwritten inline by the injector ---------- */
+  --wx-green: #07c160;   /* primary accent — send button, active icon        */
+  --wx-lime: #95ec69;    /* accentAlt — bright sent-bubble green             */
+  --wx-cyan: #10aeff;    /* secondary — links                               */
+  --wx-purple: #fa5151;  /* highlight — unread / badge red                   */
+  --wx-accent-rgb: 7 193 96;
+  --wx-accent-alt-rgb: 149 236 105;
+  --wx-secondary-rgb: 16 174 255;
+  --wx-highlight-rgb: 250 81 81;
+
+  /* --- neutral surfaces (LIGHT) — owned by this stylesheet ---------------- */
+  --wxs-bg: #f2f2f2;          /* main chat backdrop                         */
+  --wxs-panel: #ffffff;       /* received bubbles and elevated cells        */
+  --wxs-panel-2: #f7f7f7;     /* session list / secondary surface           */
+  --wxs-header: #f5f5f5;      /* conversation title bar                     */
+  --wxs-composer: #f7f7f7;    /* WeChat editor area                         */
+  --wxs-navrail: #e6e6e6;     /* far-left rail tone                         */
+  --wxs-sel: #dedede;         /* selected session row                       */
+  --wxs-hover: #e9e9e9;       /* row hover                                  */
+  --wxs-text: #191919;        /* primary text                              */
+  --wxs-subtext: #5e5e5e;     /* secondary text                            */
+  --wxs-muted: #9a9a9a;       /* timestamps, placeholders                  */
+  --wxs-line: rgba(0, 0, 0, .07);
+  --wxs-line-strong: rgba(0, 0, 0, .12);
+
+  /* --- chat bubbles (LIGHT) ---------------------------------------------- */
+  --wxs-recv: #ffffff;        /* received / assistant bubble                */
+  --wxs-recv-text: #191919;
+  --wxs-sent: #95ec69;        /* sent / user bubble (WeChat green)          */
+  --wxs-sent-text: #0b160a;
+
+  --wxs-radius: 4px;          /* desktop WeChat bubble corner radius        */
+  --wxs-shadow: 0 1px 1px rgba(0, 0, 0, .025);
+  /* Keep the working rail close to WeChat's compact proportions. */
+  --wxs-rail-width: 72px;
+  --wxs-sidebar-width: calc(var(--wxs-rail-width) + 276px);
+
+  /* --- optional chat wallpaper (painted only when an image is loaded) ----- */
+  --wxs-art-position: var(--weixin-art-position, var(--weixin-skin-art-position, center));
+  --wxs-art-scrim: rgba(237, 237, 237, 0);
+}
+
+/* Follow the OS / Codex appearance. The injector stamps data-weixin-shell. */
+html.codex-weixin-skin[data-weixin-shell="dark"] {
+  color-scheme: dark !important;
+
+  --wxs-bg: #191919;
+  --wxs-panel: #2c2c2c;
+  --wxs-panel-2: #262626;
+  --wxs-header: #252525;
+  --wxs-composer: #252525;
+  --wxs-navrail: #1c1c1c;
+  --wxs-sel: #3d3d3d;
+  --wxs-hover: #333333;
+  --wxs-text: #dedede;
+  --wxs-subtext: #a8a8a8;
+  --wxs-muted: #7c7c7c;
+  --wxs-line: rgba(255, 255, 255, .07);
+  --wxs-line-strong: rgba(255, 255, 255, .13);
+
+  --wxs-recv: #2c2c2c;
+  --wxs-recv-text: #dedede;
+  --wxs-sent: #3eb575;         /* muted green for dark mode                  */
+  --wxs-sent-text: #eafff0;
+
+  --wxs-shadow: 0 1px 2px rgba(0, 0, 0, .35);
+  --wxs-art-scrim: rgba(25, 25, 25, 0);
+
+  /* A forced dark preset can run while Codex itself still carries its light
+     token sheet. Override the native semantic tokens as well, otherwise
+     markdown, header labels and menu content remain nearly black. */
+  --color-background-surface: #191919 !important;
+  --color-background-surface-under: #141414 !important;
+  --color-background-panel: #2c2c2c !important;
+  --color-background-control: rgba(44, 44, 44, .96) !important;
+  --color-background-control-opaque: #2c2c2c !important;
+  --color-background-elevated-primary: rgba(44, 44, 44, .98) !important;
+  --color-background-elevated-primary-opaque: #2c2c2c !important;
+  --color-background-elevated-secondary: rgba(38, 38, 38, .98) !important;
+  --color-background-elevated-secondary-opaque: #262626 !important;
+  --color-text-foreground: #dedede !important;
+  --color-text-foreground-secondary: rgba(222, 222, 222, .72) !important;
+  --color-text-foreground-tertiary: rgba(222, 222, 222, .50) !important;
+  --color-text-button-secondary: #dedede !important;
+  --color-icon-primary: #dedede !important;
+  --color-icon-secondary: rgba(222, 222, 222, .72) !important;
+  --color-icon-tertiary: rgba(222, 222, 222, .50) !important;
+  --color-border: rgba(255, 255, 255, .08) !important;
+  --color-border-light: rgba(255, 255, 255, .06) !important;
+  --color-border-heavy: rgba(255, 255, 255, .14) !important;
+}
+
+/* --------------------------------------------------------------------------
+ * Base shell
+ * ------------------------------------------------------------------------ */
+html.codex-weixin-skin body {
+  background: var(--wxs-bg) !important;
+  color: var(--wxs-text) !important;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC",
+    "Microsoft YaHei", "Segoe UI", system-ui, sans-serif !important;
+}
+
+html.codex-weixin-skin body::before { content: none; }
+
+/* --------------------------------------------------------------------------
+ * Left panel → WeChat session list (flat white, hairline divider)
+ * ------------------------------------------------------------------------ */
+html.codex-weixin-skin aside.app-shell-left-panel {
+  width: var(--wxs-sidebar-width) !important;
+  min-width: var(--wxs-sidebar-width) !important;
+  background: linear-gradient(
+    to right,
+    var(--wxs-navrail) 0 var(--wxs-rail-width),
+    var(--wxs-panel-2) var(--wxs-rail-width) 100%
+  ) !important;
+  border: 0 !important;
+  border-right: 1px solid var(--wxs-line) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  color: var(--wxs-text) !important;
+  backdrop-filter: none !important;
+}
+
+html.codex-weixin-skin aside.app-shell-left-panel > .max-w-full {
+  width: calc(var(--wxs-sidebar-width) - var(--wxs-rail-width)) !important;
+  min-width: calc(var(--wxs-sidebar-width) - var(--wxs-rail-width)) !important;
+  margin-left: var(--wxs-rail-width) !important;
+  background: var(--wxs-panel-2) !important;
+}
+
+html.codex-weixin-skin aside.app-shell-left-panel nav {
+  background: var(--wxs-panel-2) !important;
+  --padding-row-x: 10px !important;
+  --padding-row-cell-x: 10px !important;
+  --radius-token-row: 4px !important;
+}
+
+/* Turn the native header controls into WeChat's search field + square action
+   button. Both controls remain clickable and retain their native aria labels. */
+html.codex-weixin-skin aside.app-shell-left-panel button[aria-label^="切换模式"] > span:first-child {
+  font-size: 0 !important;
+}
+
+html.codex-weixin-skin aside.app-shell-left-panel button[aria-label^="切换模式"] > span:first-child::after {
+  content: "+";
+  font-size: 23px;
+  font-weight: 300;
+  color: var(--wxs-subtext);
+  line-height: 1;
+}
+
+html.codex-weixin-skin aside.app-shell-left-panel button[aria-label^="切换模式"] {
+  order: 2;
+  display: grid !important;
+  place-items: center !important;
+  flex: 0 0 36px !important;
+  width: 36px !important;
+  min-width: 36px !important;
+  height: 34px !important;
+  margin: 0 0 0 8px !important;
+  padding: 0 !important;
+  border-radius: 4px !important;
+  background: var(--wxs-hover) !important;
+}
+
+html.codex-weixin-skin aside.app-shell-left-panel button[aria-label^="切换模式"] > svg {
+  display: none !important;
+}
+
+html.codex-weixin-skin aside.app-shell-left-panel button[aria-label="搜索"] {
+  order: 1;
+  display: flex !important;
+  flex: 1 1 auto !important;
+  justify-content: flex-start !important;
+  height: 34px !important;
+  padding: 0 10px !important;
+  border-radius: 4px !important;
+  background: var(--wxs-hover) !important;
+  color: var(--wxs-muted) !important;
+}
+
+html.codex-weixin-skin aside.app-shell-left-panel button[aria-label="搜索"]::after {
+  content: "搜索";
+  margin-left: 7px;
+  color: var(--wxs-muted);
+  font-size: 13px;
+  font-weight: 400;
+}
+
+html.codex-weixin-skin aside.app-shell-left-panel button,
+html.codex-weixin-skin aside.app-shell-left-panel a {
+  color: var(--wxs-text) !important;
+  border-radius: 6px !important;
+  transition: background-color .14s ease, color .14s ease !important;
+}
+
+/* Project groups become two-line WeChat session cells: square avatar, contact
+   name, then the latest task as preview copy. */
+html.codex-weixin-skin aside.app-shell-left-panel [role="listitem"][data-sidebar-project-kind] {
+  position: relative !important;
+  min-height: 64px !important;
+  padding-left: 50px !important;
+  border-bottom: 1px solid var(--wxs-line) !important;
+}
+
+html.codex-weixin-skin aside.app-shell-left-panel [role="listitem"][data-sidebar-project-kind]::before {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  left: 7px;
+  top: 9px;
+  width: 38px;
+  height: 38px;
+  border-radius: 4px;
+  background:
+    radial-gradient(circle at 35% 38%, #fff 0 3px, transparent 3.5px),
+    radial-gradient(circle at 63% 38%, #fff 0 3px, transparent 3.5px),
+    linear-gradient(145deg, #18c76f, #06ae56);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .04);
+}
+
+/* Aggregate Codex's native hasUnreadTurn state onto the project avatar, like
+   WeChat's unread-message dot. The renderer removes this as soon as every
+   unread task in the project has been opened. */
+html.codex-weixin-skin aside.app-shell-left-panel [role="listitem"][data-sidebar-project-kind][data-weixin-unread="true"]::after {
+  content: "";
+  position: absolute;
+  z-index: 4;
+  left: 39px;
+  top: 4px;
+  width: 10px;
+  height: 10px;
+  box-sizing: border-box;
+  border: 2px solid var(--wxs-panel-2);
+  border-radius: 50%;
+  background: var(--wx-purple, #fa5151);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .16);
+  pointer-events: none;
+  animation: weixin-skin-unread-pop .18s ease-out;
+}
+
+@keyframes weixin-skin-unread-pop {
+  from { transform: scale(.55); opacity: .2; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+html.codex-weixin-skin aside.app-shell-left-panel [role="listitem"][data-sidebar-project-kind]:nth-child(3n + 2)::before {
+  background:
+    radial-gradient(circle at 35% 38%, #fff 0 3px, transparent 3.5px),
+    radial-gradient(circle at 63% 38%, #fff 0 3px, transparent 3.5px),
+    linear-gradient(145deg, #5d84b9, #446b9e);
+}
+
+html.codex-weixin-skin aside.app-shell-left-panel [role="listitem"][data-sidebar-project-kind]:nth-child(3n)::before {
+  background:
+    radial-gradient(circle at 35% 38%, #fff 0 3px, transparent 3.5px),
+    radial-gradient(circle at 63% 38%, #fff 0 3px, transparent 3.5px),
+    linear-gradient(145deg, #f0b74b, #df9136);
+}
+
+html.codex-weixin-skin aside.app-shell-left-panel [class*="text-token-foreground"] {
+  color: var(--wxs-text) !important;
+}
+
+html.codex-weixin-skin aside.app-shell-left-panel [class*="text-token-input-placeholder-foreground"] {
+  color: var(--wxs-muted) !important;
+}
+
+html.codex-weixin-skin aside.app-shell-left-panel svg {
+  color: var(--wxs-subtext) !important;
+}
+
+/* Row hover — WeChat's soft grey, no transform */
+html.codex-weixin-skin aside.app-shell-left-panel button:hover,
+html.codex-weixin-skin aside.app-shell-left-panel a:hover {
+  background: var(--wxs-hover) !important;
+  color: var(--wxs-text) !important;
+  transform: none !important;
+}
+
+html.codex-weixin-skin aside.app-shell-left-panel button:hover svg,
+html.codex-weixin-skin aside.app-shell-left-panel a:hover svg {
+  color: var(--wxs-subtext) !important;
+}
+
+/* Selected session row — desktop WeChat uses a flat grey cell. */
+html.codex-weixin-skin aside.app-shell-left-panel [class~="bg-token-list-hover-background"],
+html.codex-weixin-skin aside.app-shell-left-panel [aria-current="page"] {
+  position: relative !important;
+  background: var(--wxs-sel) !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  color: var(--wxs-text) !important;
+}
+
+html.codex-weixin-skin aside.app-shell-left-panel [aria-current="page"]::before { content: none; }
+
+html.codex-weixin-skin aside.app-shell-left-panel [aria-current="page"] svg {
+  color: var(--wx-green) !important;
+}
+
+/* --------------------------------------------------------------------------
+ * Main surface → WeChat chat area (+ optional wallpaper)
+ * ------------------------------------------------------------------------ */
+html.codex-weixin-skin main.main-surface {
+  position: relative !important;
+  isolation: isolate;
+  overflow: hidden !important;
+  background: var(--wxs-bg) !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  --thread-content-max-width: min(860px, calc(100% - 72px));
+}
+
+/* Optional chat wallpaper: the default hero is a flat WeChat grey so this reads
+   clean; loading a photo via 更换背景图 turns it into a real chat background. */
+html.codex-weixin-skin main.main-surface::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: var(--weixin-skin-art);
+  background-repeat: no-repeat;
+  background-position: var(--wxs-art-position);
+  background-size: cover;
+  opacity: 0;
+}
+
+/* Wallpaper belongs to the conversation timeline only. Applying it beneath
+   Plugins / Sites / Scheduled makes their otherwise flat utility headers look
+   like a broad grey gradient. */
+html.codex-weixin-skin main.main-surface:has([data-app-action-timeline-scroll])::before {
+  opacity: 1;
+}
+
+/* Codex adds a sticky-header fade below search bars on utility pages. It is
+   useful in the stock translucent UI, but reads as an accidental gradient in
+   this flat WeChat treatment. Keep the header on the page surface and remove
+   only that generated fade; conversation scrolling remains untouched. */
+html.codex-weixin-skin main.main-surface.weixin-skin-page-sites
+  [class*="after:bg-linear-to-b"] {
+  background: var(--wxs-panel) !important;
+}
+
+html.codex-weixin-skin main.main-surface:is(.weixin-skin-page-scheduled, .weixin-skin-page-plugins)
+  [class*="after:bg-linear-to-b"] {
+  background: var(--wxs-bg) !important;
+}
+
+html.codex-weixin-skin main.main-surface:not(.weixin-skin-home-shell):not(:has([data-app-action-timeline-scroll]))
+  [class*="after:bg-linear-to-b"]::after {
+  content: none !important;
+  background: none !important;
+}
+
+/* Keep wallpaper content above the art layer, but do not rewrite the native
+   fixed app header. Turning that header into a relative flex child makes it
+   consume 46px while Codex's content frame also keeps its native 46px offset,
+   which produces the duplicated blank title strip on every main page. */
+html.codex-weixin-skin main.main-surface > :not(header.app-header-tint) {
+  position: relative;
+  z-index: 1;
+}
+
+html.codex-weixin-skin main.main-surface [role="main"] {
+  background: transparent !important;
+  color: var(--wxs-text) !important;
+}
+
+/* Chat header — solid panel, hairline bottom border, bold contact name */
+html.codex-weixin-skin main.main-surface > header.app-header-tint {
+  left: var(--wxs-sidebar-width) !important;
+  right: 0 !important;
+  width: auto !important;
+  background: var(--wxs-header) !important;
+  border-bottom: 1px solid var(--wxs-line-strong) !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  color: var(--wxs-text) !important;
+  font-weight: 600 !important;
+}
+
+html.codex-weixin-skin main.main-surface > header.app-header-tint svg {
+  color: var(--wxs-subtext) !important;
+}
+
+/* --------------------------------------------------------------------------
+ * Message bubbles. Both current Codex message markers and legacy markers are
+ * supported; the desktop app changed this DOM in mid-2026.
+ * ------------------------------------------------------------------------ */
+html.codex-weixin-skin [data-user-message-bubble="true"] {
+  position: relative !important;
+  max-width: 72% !important;
+  overflow: visible !important;
+  padding: 9px 12px !important;
+  border: 1px solid rgba(0, 0, 0, .025) !important;
+  border-radius: var(--wxs-radius) !important;
+  background: var(--wxs-sent) !important;
+  color: var(--wxs-sent-text) !important;
+  line-height: 1.55 !important;
+  box-shadow: var(--wxs-shadow) !important;
+}
+
+html.codex-weixin-skin [data-user-message-bubble="true"] * {
+  color: var(--wxs-sent-text) !important;
+}
+
+html.codex-weixin-skin [data-user-message-bubble="true"]::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  right: -5px;
+  top: 13px;
+  width: 10px;
+  height: 10px;
+  border-radius: 1px;
+  background: var(--wxs-sent);
+  transform: rotate(45deg);
+}
+
+html.codex-weixin-skin :is(
+  [data-user-message-bubble="true"],
+  [data-message-author-role="user"]:not(:has([data-user-message-bubble="true"]))
+)::before {
+  content: "我";
+  position: absolute;
+  right: -50px;
+  top: 0;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 4px;
+  background: #576b95;
+  color: #fff !important;
+  font-size: 13px;
+  font-weight: 650;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .06);
+}
+
+/* Use the same authenticated profile image as the far-left WeChat rail. The
+   text avatar above remains the fallback when Codex exposes no image URL. */
+html.codex-weixin-skin[data-weixin-profile-avatar="true"] :is(
+  [data-user-message-bubble="true"],
+  [data-message-author-role="user"]:not(:has([data-user-message-bubble="true"]))
+)::before {
+  content: "";
+  background-color: var(--wxs-panel);
+  background-image: var(--wxs-user-avatar);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+html.codex-weixin-skin [data-content-search-unit-key$=":assistant"] {
+  position: relative !important;
+  width: fit-content !important;
+  max-width: 72% !important;
+  margin-right: auto !important;
+  padding: 9px 12px !important;
+  border: 1px solid rgba(0, 0, 0, .025) !important;
+  border-radius: var(--wxs-radius) !important;
+  background: var(--wxs-recv) !important;
+  color: var(--wxs-recv-text) !important;
+  line-height: 1.55 !important;
+  box-shadow: var(--wxs-shadow) !important;
+}
+
+html.codex-weixin-skin [data-content-search-unit-key$=":assistant"]::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: -5px;
+  top: 13px;
+  width: 10px;
+  height: 10px;
+  border-radius: 1px;
+  background: var(--wxs-recv);
+  transform: rotate(45deg);
+}
+
+html.codex-weixin-skin [data-content-search-unit-key$=":assistant"]::before {
+  content: "AI";
+  position: absolute;
+  left: -50px;
+  top: 0;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 4px;
+  background: var(--wx-green);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 750;
+  letter-spacing: -.02em;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .06);
+}
+
+html.codex-weixin-skin [data-content-search-unit-key$=":assistant"] :is(pre, code) {
+  border-radius: 3px !important;
+  background: var(--wxs-panel-2) !important;
+}
+
+html.codex-weixin-skin [data-message-author-role] {
+  position: relative;
+  max-width: 78% !important;
+  width: fit-content !important;
+  padding: 8px 12px !important;
+  border-radius: var(--wxs-radius) !important;
+  line-height: 1.55 !important;
+  box-shadow: var(--wxs-shadow) !important;
+}
+
+/* Received (assistant) — white bubble, left aligned, small left tail */
+html.codex-weixin-skin [data-message-author-role="assistant"] {
+  margin-right: auto !important;
+  background: var(--wxs-recv) !important;
+  color: var(--wxs-recv-text) !important;
+}
+
+html.codex-weixin-skin [data-message-author-role="assistant"]::after {
+  content: "";
+  position: absolute;
+  left: -5px;
+  top: 13px;
+  width: 10px;
+  height: 10px;
+  background: var(--wxs-recv);
+  transform: rotate(45deg);
+  border-radius: 2px;
+}
+
+/* Sent (user) — green bubble, right aligned, small right tail */
+html.codex-weixin-skin [data-message-author-role="user"] {
+  margin-left: auto !important;
+  background: var(--wxs-sent) !important;
+  color: var(--wxs-sent-text) !important;
+}
+
+html.codex-weixin-skin [data-message-author-role="user"]::after {
+  content: "";
+  position: absolute;
+  right: -5px;
+  top: 13px;
+  width: 10px;
+  height: 10px;
+  background: var(--wxs-sent);
+  transform: rotate(45deg);
+  border-radius: 2px;
+}
+
+html.codex-weixin-skin [data-message-author-role="user"] * { color: var(--wxs-sent-text) !important; }
+
+/* Keep code blocks / pre inside bubbles legible on the green surface */
+html.codex-weixin-skin [data-message-author-role="user"] :is(pre, code) {
+  background: rgba(0, 0, 0, .10) !important;
+  color: #0b160a !important;
+  border-radius: 4px;
+}
+
+/* Fallback rounding for any article-wrapped message */
+html.codex-weixin-skin article,
+html.codex-weixin-skin [data-message-author-role] { border-radius: var(--wxs-radius); }
+
+/* --------------------------------------------------------------------------
+ * Composer → WeChat input bar (flat, top divider, no floating pill)
+ * ------------------------------------------------------------------------ */
+html.codex-weixin-skin .composer-surface-chrome {
+  overflow: visible !important;
+  border: 0 !important;
+  border-top: 1px solid var(--wxs-line) !important;
+  border-radius: 0 !important;
+  min-height: 112px !important;
+  padding: 12px 24px 8px !important;
+  background: var(--wxs-composer) !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+html.codex-weixin-skin .composer-surface-chrome::before { content: none !important; }
+
+html.codex-weixin-skin [data-thread-scroll-footer="true"] {
+  padding-bottom: 0 !important;
+  border-top: 1px solid var(--wxs-line-strong) !important;
+  background: var(--wxs-composer) !important;
+}
+
+/*
+ * Opening Codex's pinned-summary panel shifts the whole thread column left so
+ * the message stream can make room for the floating panel. The WeChat skin's
+ * composer deliberately spans the full main surface, so inheriting that shift
+ * would push its left edge underneath the navigation/sidebar. Counter-shift
+ * the footer back to the main surface, then subtract the summary reservation
+ * from its width. This mirrors Codex's native pinned-summary layout: messages
+ * and composer share the left region while the floating panel owns the right.
+ */
+html.codex-weixin-skin
+  [style*="--thread-wide-block-inline-shift"]
+  > [data-thread-scroll-footer="true"] {
+  transform: translateX(var(--thread-wide-block-inline-shift, 0px)) !important;
+  width: calc(
+    100%
+    - var(--thread-wide-block-inline-shift, 0px)
+    - var(--thread-wide-block-inline-shift, 0px)
+  ) !important;
+}
+
+/* The normal 860px WeChat message column can be wider than the space left by
+   the summary in a regular window. Keep a small native-style gutter on both
+   sides so message bubbles and avatars never touch the floating panel. */
+html.codex-weixin-skin main.main-surface:has(
+  [class~="origin-top-right"]:not([style*="opacity: 0"])
+) [style*="--thread-wide-block-inline-shift"] {
+  --thread-content-max-width: max(
+    320px,
+    min(
+      860px,
+      calc(
+        100%
+        - var(--thread-wide-block-inline-shift, 0px)
+        - var(--thread-wide-block-inline-shift, 0px)
+        - 32px
+      )
+    )
+  );
+}
+
+html.codex-weixin-skin [data-pip-obstacle="thread-footer"] {
+  width: 100% !important;
+  max-width: none !important;
+  padding-inline: 0 !important;
+}
+
+html.codex-weixin-skin [data-codex-composer-root] { width: 100% !important; }
+
+html.codex-weixin-skin .ProseMirror {
+  min-height: 42px !important;
+  color: var(--wxs-text) !important;
+  caret-color: var(--wx-green) !important;
+}
+
+html.codex-weixin-skin .composer-surface-chrome p.placeholder::after {
+  color: var(--wxs-muted) !important;
+  opacity: 1 !important;
+}
+
+/* Secondary composer / header icon buttons — muted, green on hover */
+html.codex-weixin-skin .composer-surface-chrome button:not([class~="bg-token-foreground"]),
+html.codex-weixin-skin .weixin-skin-home-utility button {
+  color: var(--wxs-subtext) !important;
+}
+
+html.codex-weixin-skin .composer-surface-chrome button:not([class~="bg-token-foreground"]) svg,
+html.codex-weixin-skin .weixin-skin-home-utility button svg { color: currentColor !important; }
+
+html.codex-weixin-skin .composer-surface-chrome button:not([class~="bg-token-foreground"]):hover {
+  color: var(--wx-green) !important;
+  background: rgb(var(--wx-accent-rgb) / .10) !important;
+}
+
+/* Primary action (send) — solid WeChat green */
+html.codex-weixin-skin button[class~="bg-token-foreground"] {
+  background: var(--wx-green) !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
+}
+
+html.codex-weixin-skin button[class~="bg-token-foreground"] * { color: #ffffff !important; }
+
+/* --------------------------------------------------------------------------
+ * Switches / checkboxes → WeChat green (settings screen)
+ * ------------------------------------------------------------------------ */
+html.codex-weixin-skin input[type="checkbox"],
+html.codex-weixin-skin input[type="radio"] {
+  accent-color: var(--wx-green) !important;
+}
+
+/* WeChat‑green toggles. Codex renders role=switch as a transparent wrapper
+   <button> whose visible pill is a child <span> (bg-token-charts-blue when on).
+   Recolour that track; the off state (bg-token-foreground/10) stays grey. */
+html.codex-weixin-skin [role="switch"][aria-checked="true"] > span,
+html.codex-weixin-skin [role="switch"][aria-checked="true"] [class*="charts-blue"] {
+  background-color: var(--wx-green) !important;
+  background-image: none !important;
+}
+
+/* Dialogs, menus and settings cards use the same quiet, squared WeChat
+   surfaces instead of Codex's translucent floating chrome. */
+html.codex-weixin-skin :is([role="dialog"], [role="menu"], [role="listbox"]) {
+  border: 1px solid var(--wxs-line-strong) !important;
+  border-radius: 5px !important;
+  background: var(--wxs-panel-2) !important;
+  color: var(--wxs-text) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .12) !important;
+  backdrop-filter: none !important;
+}
+
+html.codex-weixin-skin :is([role="dialog"], [role="menu"], [role="listbox"]) button {
+  border-radius: 4px !important;
+}
+
+html.codex-weixin-skin :is(input:not([type]), input[type="text"], input[type="search"], textarea) {
+  border-color: var(--wxs-line-strong) !important;
+  border-radius: 4px !important;
+  background: var(--wxs-panel) !important;
+  color: var(--wxs-text) !important;
+}
+
+/* --------------------------------------------------------------------------
+ * Global search → compact WeChat search panel
+ *
+ * The command menu is a nested cmdk surface. Styling only [role=dialog] left
+ * Codex's rounded inner card and bordered list visible, producing the double
+ * frame seen in the unskinned panel. Keep these rules specific to the global
+ * command menu so profile menus and settings dialogs retain their own layout.
+ * ------------------------------------------------------------------------ */
+html.codex-weixin-skin .codex-dialog-overlay[data-state="open"]:has(+ .global-command-menu-dialog) {
+  background: rgba(0, 0, 0, .14) !important;
+  backdrop-filter: none !important;
+}
+
+html.codex-weixin-skin .global-command-menu-dialog {
+  top: 92px !important;
+  width: min(520px, calc(100vw - 32px)) !important;
+  max-width: none !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 10px !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+}
+
+html.codex-weixin-skin .global-command-menu-dialog > [cmdk-root] {
+  position: relative !important;
+  display: flex !important;
+  flex-direction: column !important;
+  width: 100% !important;
+  max-height: min(590px, calc(100vh - 124px)) !important;
+  padding: 10px 10px 8px !important;
+  border: 1px solid var(--wxs-line-strong) !important;
+  border-radius: 10px !important;
+  background: var(--wxs-panel) !important;
+  box-shadow: 0 18px 44px rgba(0, 0, 0, .18) !important;
+  overflow: hidden !important;
+}
+
+html.codex-weixin-skin .global-command-menu-dialog [cmdk-input] {
+  flex: 0 0 40px !important;
+  width: 100% !important;
+  height: 40px !important;
+  padding: 0 14px 0 38px !important;
+  border: 0 !important;
+  border-radius: 6px !important;
+  outline: 0 !important;
+  background-color: var(--wxs-hover) !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23858585' stroke-width='1.8' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='6.5'/%3E%3Cpath d='m16 16 4 4'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: 13px center !important;
+  color: var(--wxs-text) !important;
+  font-size: 14px !important;
+  box-shadow: none !important;
+}
+
+html.codex-weixin-skin .global-command-menu-dialog [cmdk-input]::placeholder {
+  color: var(--wxs-muted) !important;
+  opacity: 1 !important;
+}
+
+html.codex-weixin-skin .global-command-menu-dialog [cmdk-list] {
+  width: 100% !important;
+  max-height: min(520px, calc(100vh - 184px)) !important;
+  margin-top: 8px !important;
+  padding: 0 3px 4px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, .16) transparent;
+}
+
+html.codex-weixin-skin .global-command-menu-dialog [cmdk-group] {
+  gap: 0 !important;
+}
+
+html.codex-weixin-skin .global-command-menu-dialog [cmdk-group-heading] > span {
+  padding: 10px 9px 5px !important;
+  color: var(--wxs-muted) !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  line-height: 1.4 !important;
+}
+
+html.codex-weixin-skin .global-command-menu-dialog [cmdk-item] {
+  min-height: 38px !important;
+  margin: 1px 0 !important;
+  padding: 7px 9px !important;
+  border-radius: 6px !important;
+  color: var(--wxs-text) !important;
+  font-size: 14px !important;
+  line-height: 20px !important;
+  transition: background-color .12s ease, color .12s ease !important;
+}
+
+html.codex-weixin-skin .global-command-menu-dialog [cmdk-item][data-selected="true"] {
+  background: rgb(var(--wx-accent-rgb) / .11) !important;
+  color: var(--wxs-text) !important;
+}
+
+html.codex-weixin-skin .global-command-menu-dialog [cmdk-item]:not([data-selected="true"]):hover {
+  background: var(--wxs-hover) !important;
+}
+
+html.codex-weixin-skin .global-command-menu-dialog [cmdk-item] svg {
+  color: var(--wxs-subtext) !important;
+}
+
+html.codex-weixin-skin .global-command-menu-dialog [cmdk-item][data-selected="true"] svg {
+  color: var(--wx-green) !important;
+}
+
+html.codex-weixin-skin .global-command-menu-dialog [cmdk-item] [class*="text-token-description"] {
+  color: var(--wxs-muted) !important;
+  font-size: 12px !important;
+}
+
+html.codex-weixin-skin .global-command-menu-dialog kbd {
+  min-width: 26px !important;
+  padding: 3px 6px !important;
+  border: 0 !important;
+  border-radius: 9px !important;
+  background: rgba(0, 0, 0, .055) !important;
+  color: var(--wxs-muted) !important;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  line-height: 1 !important;
+  text-align: center !important;
+  box-shadow: none !important;
+}
+
+/* --------------------------------------------------------------------------
+ * Home screen → clean WeChat welcome (no wallpaper card)
+ * ------------------------------------------------------------------------ */
+html.codex-weixin-skin main.main-surface.weixin-skin-home-shell::before {
+  opacity: 0; /* keep the launch/home screen flat and bright */
+}
+
+/* Keep the home hero (greeting block) a touch taller. This also satisfies the
+   engine's home health‑check, which requires the hero to be >= 120px tall. */
+html.codex-weixin-skin .weixin-skin-home > :first-child > :first-child > :first-child {
+  min-height: 132px !important;
+}
+
+html.codex-weixin-skin .weixin-skin-home [data-testid="home-icon"] { color: var(--wx-green) !important; }
+
+html.codex-weixin-skin .weixin-skin-home [data-feature="game-source"] {
+  color: var(--wxs-text) !important;
+  text-shadow: none !important;
+}
+
+html.codex-weixin-skin .weixin-skin-home [data-feature="game-source"] button {
+  padding: 1px 8px;
+  border: 1px solid rgb(var(--wx-accent-rgb) / .35);
+  border-radius: 4px;
+  background: rgb(var(--wx-accent-rgb) / .10);
+  color: var(--wx-green) !important;
+  text-decoration: none !important;
+}
+
+/* Suggestion cards — flat WeChat cells */
+html.codex-weixin-skin .weixin-skin-home .group\/home-suggestions button {
+  min-height: 92px !important;
+  padding: 14px !important;
+  border: 1px solid var(--wxs-line) !important;
+  border-radius: 8px !important;
+  background: var(--wxs-panel) !important;
+  color: var(--wxs-text) !important;
+  box-shadow: var(--wxs-shadow) !important;
+  backdrop-filter: none !important;
+  transition: background-color .14s ease, border-color .14s ease !important;
+}
+
+html.codex-weixin-skin .weixin-skin-home .group\/home-suggestions button:hover {
+  transform: none !important;
+  border-color: rgb(var(--wx-accent-rgb) / .4) !important;
+  background: var(--wxs-panel-2) !important;
+}
+
+html.codex-weixin-skin .weixin-skin-home .group\/home-suggestions button [class~="text-token-text-primary"] {
+  color: var(--wxs-text) !important;
+}
+
+html.codex-weixin-skin .weixin-skin-home .group\/home-suggestions button svg {
+  color: var(--wx-green) !important;
+}
+
+/* Project selector button */
+html.codex-weixin-skin .weixin-skin-home .group\/project-selector > button {
+  border: 1px solid var(--wxs-line) !important;
+  background: var(--wxs-panel) !important;
+  color: var(--wxs-text) !important;
+  border-radius: 6px !important;
+  box-shadow: none !important;
+}
+
+/* Home project‑picker cap + composer → one flat, seamless WeChat input area:
+   equal width, no floating card, a single hairline separating it from messages. */
+html.codex-weixin-skin .weixin-skin-home-utility {
+  top: 0 !important;
+  width: 100% !important;
+  margin-inline: 0 !important;
+  border-radius: 0 !important;
+  background: var(--wxs-panel) !important;
+  border-top: 1px solid var(--wxs-line) !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+html.codex-weixin-skin .weixin-skin-home:has(.weixin-skin-home-utility) .composer-surface-chrome {
+  border-top: 0 !important;
+}
+
+/* --------------------------------------------------------------------------
+ * Scrollbars + decorative chrome (kept hidden)
+ * ------------------------------------------------------------------------ */
+html.codex-weixin-skin [role="main"] {
+  background: transparent !important;
+  scrollbar-color: rgba(0, 0, 0, .18) transparent;
+}
+
+#codex-weixin-skin-chrome {
+  display: contents !important;
+  pointer-events: none !important;
+}
+
+.weixin-skin-brand,
+.weixin-skin-status,
+.weixin-skin-quote,
+.weixin-skin-orbit,
+.weixin-skin-particles { display: none !important; }
+
+/* Persistent decorative app rail. It supplies the missing third column that
+   makes the silhouette immediately read as desktop WeChat. */
+.weixin-skin-navrail {
+  position: fixed;
+  z-index: 80;
+  inset: 0 auto 0 0;
+  display: flex;
+  width: var(--wxs-rail-width);
+  flex-direction: column;
+  align-items: center;
+  padding: 58px 0 17px;
+  background: var(--wxs-navrail);
+  color: var(--wxs-subtext);
+  box-shadow: inset -1px 0 var(--wxs-line);
+  pointer-events: auto;
+}
+
+/* Settings replaces the regular app shell with its own full-window sidebar.
+   Let that sidebar use the full width instead of leaving the fixed WeChat rail
+   on top of its search field and navigation labels. */
+html.codex-weixin-skin[data-weixin-settings-open="true"] .weixin-skin-navrail {
+  display: none !important;
+}
+
+.weixin-skin-rail-avatar {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  margin-bottom: 34px;
+  border-radius: 4px;
+  background: linear-gradient(145deg, #34d47e, #07b65a);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .05);
+}
+
+.weixin-skin-rail-avatar-image {
+  position: absolute;
+  inset: 0;
+  display: none;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  object-fit: cover;
+}
+
+.weixin-skin-rail-avatar[data-has-profile-avatar="true"] {
+  background: var(--wxs-panel);
+}
+
+.weixin-skin-rail-avatar[data-has-profile-avatar="true"] .weixin-skin-rail-avatar-image {
+  display: block;
+}
+
+.weixin-skin-rail-avatar[data-has-profile-avatar="true"] .weixin-skin-rail-avatar-fallback {
+  display: none;
+}
+
+.weixin-skin-rail-avatar i {
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  width: 9px;
+  height: 9px;
+  border: 2px solid var(--wxs-navrail);
+  border-radius: 50%;
+  background: var(--wx-green);
+}
+
+.weixin-skin-rail-primary,
+.weixin-skin-rail-secondary {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 29px;
+}
+
+.weixin-skin-rail-secondary { margin-top: auto; gap: 23px; }
+
+.weixin-skin-rail-primary > button,
+.weixin-skin-rail-secondary > button {
+  display: grid;
+  place-items: center;
+  width: 31px;
+  height: 31px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  transition: color .14s ease, background-color .14s ease, transform .14s ease;
+}
+
+.weixin-skin-rail-primary > button:hover,
+.weixin-skin-rail-secondary > button:hover {
+  background: rgb(var(--wx-accent-rgb) / .10);
+  color: var(--wx-green);
+}
+
+.weixin-skin-rail-primary > button:active,
+.weixin-skin-rail-secondary > button:active {
+  transform: scale(.92);
+}
+
+.weixin-skin-navrail button[data-weixin-unavailable="true"] {
+  color: var(--wx-purple);
+  animation: weixin-skin-shortcut-shake .3s ease;
+}
+
+.weixin-skin-navrail svg {
+  width: 25px;
+  height: 25px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.65;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.weixin-skin-navrail .is-active {
+  color: var(--wx-green);
+}
+
+.weixin-skin-navrail .is-active svg { fill: rgb(var(--wx-accent-rgb) / .08); }
+
+/* A regular macOS window leaves much less room beside the thread than a
+   fullscreen window. Keep the conversation column intentionally narrower in
+   that range so bubbles do not visually press against the window edges. */
+@media (min-width: 921px) and (max-width: 1440px) {
+  html.codex-weixin-skin main.main-surface {
+    --thread-content-max-width: min(800px, calc(100% - 112px));
+  }
+}
+
+@media (max-width: 920px) {
+  :root.codex-weixin-skin {
+    --wxs-rail-width: 72px;
+    --wxs-sidebar-width: calc(var(--wxs-rail-width) + 240px);
+  }
+
+  .weixin-skin-navrail { padding-top: 54px; }
+  html.codex-weixin-skin main.main-surface { --thread-content-max-width: calc(100% - 56px); }
+}
+
+@keyframes weixin-skin-shortcut-shake {
+  25% { transform: translateX(-2px); }
+  75% { transform: translateX(2px); }
+}
+
+/* --------------------------------------------------------------------------
+ * Motion
+ * ------------------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  html.codex-weixin-skin *,
+  html.codex-weixin-skin *::before,
+  html.codex-weixin-skin *::after {
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+    animation-duration: .01ms !important;
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "id": "preset-wechat-dark",
+  "name": "微信 · 深色",
+  "brandSubtitle": "CODEX WEIXIN SKIN",
+  "tagline": "深色模式下的微信聊天界面。",
+  "projectPrefix": "选择项目 · ",
+  "projectLabel": "◉  选择项目",
+  "statusText": "WEIXIN SKIN ONLINE",
+  "quote": "少即是多",
+  "appearance": "dark",
+  "image": "background.png",
+  "colors": {
+    "background": "#191919",
+    "panel": "#2c2c2c",
+    "panelAlt": "#262626",
+    "accent": "#07c160",
+    "accentAlt": "#3eb575",
+    "secondary": "#4c8cf5",
+    "highlight": "#fa5151",
+    "text": "#dedede",
+    "muted": "#7c7c7c",
+    "line": "rgba(255, 255, 255, .08)"
+  }
+}

@@ -1,0 +1,185 @@
+# Codex 微信主题 · Codex WeChat Skin
+
+让官方 Codex macOS 桌面应用拥有接近桌面微信的使用体验：微信绿、三栏布局、聊天气泡、会话列表、真实用户头像，以及统一适配的搜索、设置和功能页面。
+
+[English](./README.en.md) · 简体中文
+
+![Codex 微信主题聊天界面](./docs/screenshots/chat.png)
+
+> [!IMPORTANT]
+> 本项目是非官方主题，与 OpenAI、腾讯或微信无关联。Codex 与微信均为各自权利人的商标。
+
+## 主题特色
+
+- **微信式三栏布局**：60px 功能导航栏、项目/会话列表和主内容区。
+- **聊天气泡**：用户消息使用微信绿色气泡，助手消息使用白色气泡，并带有气泡尖角。
+- **真实头像**：侧边栏头像和聊天中的“我”使用当前 Codex 用户头像。
+- **完整页面适配**：聊天、全局搜索、设置、站点、已安排任务和插件页面使用统一视觉语言。
+- **微信交互细节**：选中态、未读红点、搜索框、按钮、开关和细分割线均经过主题化。
+- **浅色 / 深色预设**：内置 `微信 · 浅色` 与 `微信 · 深色` 两套主题。
+- **自定义背景**：可以载入自己的聊天背景图并调整配色。
+- **随时还原**：不修改 Codex 应用文件和签名，一键恢复官方外观。
+
+## 界面预览
+
+| 搜索 | 设置 |
+| --- | --- |
+| ![微信主题搜索](./docs/screenshots/search.png) | ![微信主题设置](./docs/screenshots/settings.png) |
+
+| 站点 | 已安排任务 |
+| --- | --- |
+| ![微信主题站点](./docs/screenshots/sites.png) | ![微信主题已安排任务](./docs/screenshots/scheduled.png) |
+
+| 插件 |
+| --- |
+| ![微信主题插件](./docs/screenshots/plugins.png) |
+
+## 环境要求
+
+- macOS
+- 已安装官方 Codex 桌面应用（当前应用名称可能显示为 ChatGPT）
+- Codex 至少正常启动过一次
+- 无需另外安装 Node.js
+
+目前仅支持 macOS。Codex 更新界面结构后，主题选择器可能需要同步更新。
+
+## 安装与使用
+
+### 图形化安装（推荐）
+
+1. 下载本仓库并解压，或使用 Git 克隆：
+
+   ```bash
+   git clone https://github.com/SnakeLil/Codex-Weixin-Skin.git
+   ```
+
+2. 先正常启动一次 Codex，然后**完全退出 Codex**。
+3. 打开项目的 `macos` 文件夹。
+4. 右键点击 **Install Codex Weixin Skin.command**，选择“打开”。
+5. 安装程序会把主题复制到稳定目录，创建桌面快捷启动器，并启动带微信主题的 Codex。
+
+首次打开若被 macOS 拦截，请在“系统设置 → 隐私与安全性”中选择“仍要打开”，或再次右键选择“打开”。
+
+### 以后如何启动
+
+安装完成后，桌面会出现以下快捷入口：
+
+| 快捷入口 | 作用 |
+| --- | --- |
+| **Codex WeChat Skin.command** | 启动或重新应用微信主题 |
+| **Codex WeChat Skin - Customize.command** | 切换预设、修改颜色或载入聊天背景 |
+| **Codex WeChat Skin - Verify.command** | 验证主题并生成当前界面截图 |
+| **Codex WeChat Skin - Restore.command** | 移除主题并恢复官方外观 |
+
+> [!TIP]
+> 如果重启 Codex 后恢复了默认外观，请退出 Codex，再双击桌面的 **Codex WeChat Skin.command**。主题依赖仅监听本机回环地址的调试连接，普通方式启动 Codex 时不会自动开放该连接。
+
+### 命令行安装
+
+```bash
+cd Codex-Weixin-Skin/macos
+
+# 安装到 ~/.codex/codex-weixin-skin-studio，但暂不启动
+./scripts/install-weixin-skin-macos.sh --no-launch
+
+# 启动 / 重新应用主题
+~/.codex/codex-weixin-skin-studio/scripts/start-weixin-skin-macos.sh --prompt-restart
+```
+
+## 切换主题和自定义
+
+```bash
+# 微信浅色（默认）
+~/.codex/codex-weixin-skin-studio/scripts/switch-theme-macos.sh \
+  --id preset-wechat-light
+
+# 微信深色
+~/.codex/codex-weixin-skin-studio/scripts/switch-theme-macos.sh \
+  --id preset-wechat-dark
+```
+
+也可以双击 **Customize Codex Weixin Skin.command**，通过可视化窗口选择预设、调整主题色或载入自己的背景图。
+
+可选安装 [SwiftBar](https://swiftbar.app/) 后，再双击 **Install Menu Bar.command**，即可从菜单栏快速应用、暂停、验证或还原主题。
+
+## 工作原理与安全边界
+
+- 不修改官方 `.app`、`app.asar` 或代码签名。
+- 在启动时仅向 `127.0.0.1` 开放本地 CDP（Chrome DevTools Protocol）端口。
+- 使用 Codex 自带且经过签名校验的 Node.js 运行时，不要求全局 Node 环境。
+- 通过本地 CDP 将自包含的 CSS 和渲染脚本注入 Codex 页面，并监听页面变化持续适配。
+- 安装前会备份 `~/.codex/config.toml`，仅管理外观相关配置。
+- 主题运行状态保存在 `~/Library/Application Support/CodexWeixinSkinStudio/`。
+- 调试端口只绑定本机回环地址，不监听局域网或公网地址。
+
+## 验证主题
+
+```bash
+~/.codex/codex-weixin-skin-studio/scripts/verify-weixin-skin-macos.sh \
+  --screenshot "$HOME/Desktop/Codex-WeChat-Skin.png"
+```
+
+验证会检查当前主题 ID、注入版本、页面布局和横向溢出，并生成截图。
+
+## 还原与卸载
+
+双击桌面的 **Codex WeChat Skin - Restore.command**，或运行：
+
+```bash
+~/.codex/codex-weixin-skin-studio/scripts/restore-weixin-skin-macos.sh \
+  --restore-base-theme --restart-codex
+```
+
+这会移除运行时主题、恢复备份的外观配置，并清理主题创建的桌面快捷入口。
+
+## 常见问题
+
+### 重启后主题消失
+
+这是因为 Codex 被普通方式启动，未开放本地主题调试连接。退出 Codex，然后使用桌面的 **Codex WeChat Skin.command** 重新启动即可。
+
+### 双击安装器没有运行
+
+右键 `.command` 文件选择“打开”；若仍被阻止，请前往“系统设置 → 隐私与安全性”允许打开。
+
+### 提示 Codex 正在运行
+
+首次安装时必须先完全退出 Codex，避免应用退出过程中覆盖配置文件。退出后重新执行安装器。
+
+### Codex 更新后布局异常
+
+先重新运行安装器以更新已安装的主题文件。如果问题仍存在，请附上 Codex 版本和截图提交 Issue。
+
+## 项目结构
+
+```text
+Codex-Weixin-Skin/
+├── README.md / README.en.md
+├── LICENSE
+├── docs/screenshots/              # 主题实拍截图
+└── macos/
+    ├── assets/                    # CSS、渲染脚本和默认主题资源
+    ├── presets/                   # 微信浅色 / 深色预设
+    ├── scripts/                   # 安装、启动、注入、验证和还原工具
+    ├── menubar/                   # SwiftBar 菜单栏插件
+    └── *.command                  # 可双击启动器
+```
+
+## 参与贡献
+
+欢迎提交 Issue 和 Pull Request。若反馈界面问题，请尽量提供：
+
+- Codex 版本与 macOS 版本
+- 出现问题的页面与复现步骤
+- 隐去敏感内容后的截图
+- `Verify Codex Weixin Skin.command` 的验证结果
+
+## 致谢
+
+安装与本地 CDP 注入思路参考了 [Codex-Dream-Skin](https://github.com/Fei-Away/Codex-Dream-Skin)。本项目重新设计并实现了微信主题的布局、样式与交互适配。
+
+## 许可证与免责声明
+
+本项目采用 [MIT License](./LICENSE)。
+
+本项目仅用于个性化本地应用界面。使用者需自行承担 Codex 版本变化、第三方应用条款及运行时调试接口带来的风险。

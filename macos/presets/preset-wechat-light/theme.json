@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "id": "preset-wechat-light",
+  "name": "微信 · 浅色",
+  "brandSubtitle": "CODEX WEIXIN SKIN",
+  "tagline": "把 Codex 变成你熟悉的微信聊天界面。",
+  "projectPrefix": "选择项目 · ",
+  "projectLabel": "◉  选择项目",
+  "statusText": "WEIXIN SKIN ONLINE",
+  "quote": "少即是多",
+  "appearance": "light",
+  "image": "background.png",
+  "colors": {
+    "background": "#ededed",
+    "panel": "#ffffff",
+    "panelAlt": "#f7f7f7",
+    "accent": "#07c160",
+    "accentAlt": "#95ec69",
+    "secondary": "#10aeff",
+    "highlight": "#fa5151",
+    "text": "#191919",
+    "muted": "#9a9a9a",
+    "line": "rgba(0, 0, 0, .07)"
+  }
+}
