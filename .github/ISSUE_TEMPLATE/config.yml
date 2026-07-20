@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 使用说明 / Documentation
+    url: https://github.com/SnakeLil/Codex-Weixin-Skin#安装与使用
+    about: 安装、启动、重新应用和还原主题的完整说明
+  - name: English documentation
+    url: https://github.com/SnakeLil/Codex-Weixin-Skin/blob/main/README.en.md
+    about: Installation, usage, troubleshooting, and security notes in English

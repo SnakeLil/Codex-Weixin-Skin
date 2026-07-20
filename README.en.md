@@ -2,9 +2,15 @@
 
 Bring a desktop-WeChat-inspired experience to the official Codex app for macOS: WeChat green, a three-column shell, chat bubbles, conversation previews, real user avatars, and consistent styling for search, settings, and feature pages.
 
+[![Release](https://img.shields.io/github/v/release/SnakeLil/Codex-Weixin-Skin?display_name=tag&style=flat-square&color=07c160)](https://github.com/SnakeLil/Codex-Weixin-Skin/releases/latest)
+[![macOS](https://img.shields.io/badge/macOS-12%2B-111111?style=flat-square&logo=apple)](#compatibility)
+[![License](https://img.shields.io/github/license/SnakeLil/Codex-Weixin-Skin?style=flat-square&color=07c160)](./LICENSE)
+
 English · [简体中文](./README.md)
 
-![Codex WeChat Skin chat view](./docs/screenshots/chat.png)
+[**Download the latest release**](https://github.com/SnakeLil/Codex-Weixin-Skin/releases/latest/download/Codex-Weixin-Skin-v1.0.0.zip) · [Install guide](#graphical-install-recommended) · [Report an issue](https://github.com/SnakeLil/Codex-Weixin-Skin/issues/new/choose)
+
+![Codex WeChat Skin feature demo](./docs/demo/codex-weixin-skin-demo.gif)
 
 > [!IMPORTANT]
 > This is an unofficial theme and is not affiliated with OpenAI, Tencent, or WeChat. Codex and WeChat are trademarks of their respective owners.
@@ -21,6 +27,8 @@ English · [简体中文](./README.md)
 - **Fully reversible** without modifying the Codex app bundle or its signature.
 
 ## Gallery
+
+![Codex WeChat Skin chat view](./docs/screenshots/chat.png)
 
 | Search | Settings |
 | --- | --- |
@@ -43,11 +51,23 @@ English · [简体中文](./README.md)
 
 Only macOS is supported at this time. A Codex UI update may require corresponding selector updates in the theme.
 
+## Compatibility
+
+| Item | Status |
+| --- | --- |
+| macOS | 12.0 or later, following the current official Codex app requirement |
+| Apple Silicon | Supported; v1.0.0 was verified on Apple Silicon with macOS 15.5 |
+| Intel Mac | The installer includes architecture checks; real-device reports are welcome |
+| Codex Desktop | v1.0.0 was verified with `26.715.31925`; please report regressions after app updates |
+| Windows / Linux | Not supported yet |
+
+“Verified” describes the environment used for live UI testing; it is not an exclusive version requirement.
+
 ## Install and use
 
 ### Graphical install (recommended)
 
-1. Download and extract this repository, or clone it:
+1. Download `Codex-Weixin-Skin-v1.0.0.zip` from the latest [Release](https://github.com/SnakeLil/Codex-Weixin-Skin/releases/latest) and extract it. Developers can also clone the repository:
 
    ```bash
    git clone https://github.com/SnakeLil/Codex-Weixin-Skin.git

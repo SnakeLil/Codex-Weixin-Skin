@@ -1,0 +1,88 @@
+name: 界面问题 / Bug report
+description: 报告主题布局、安装、启动或兼容性问题
+title: "[Bug] "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢反馈。请先确认已使用最新版主题，并在截图和日志中隐藏私人对话、路径及账号信息。
+
+  - type: input
+    id: macos-version
+    attributes:
+      label: macOS 版本
+      placeholder: 例如 macOS 15.5
+    validations:
+      required: true
+
+  - type: input
+    id: codex-version
+    attributes:
+      label: Codex Desktop 版本
+      description: 可在 Codex 菜单的“关于”中查看。
+      placeholder: 例如 26.715.31925
+    validations:
+      required: true
+
+  - type: input
+    id: skin-version
+    attributes:
+      label: 主题版本
+      placeholder: 例如 v1.0.0
+    validations:
+      required: true
+
+  - type: dropdown
+    id: affected-area
+    attributes:
+      label: 出现问题的位置
+      options:
+        - 安装 / 启动 / 重新应用
+        - 聊天界面
+        - 搜索
+        - 设置
+        - 站点
+        - 已安排任务
+        - 插件
+        - 侧边栏 / 标题栏
+        - 其他
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: 复现步骤
+      placeholder: |
+        1. 打开……
+        2. 点击……
+        3. 看到……
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: 预期结果与实际结果
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: 截图、录屏或验证结果
+      description: 可拖入已脱敏的图片，并附上 Verify 启动器的输出。
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: 提交前确认
+      options:
+        - label: 我已经使用最新 Release 重新安装或重新应用主题。
+          required: true
+        - label: 我已隐藏截图和日志中的私人信息。
+          required: true
+        - label: 我已搜索现有 Issue，未发现相同问题。
+          required: true

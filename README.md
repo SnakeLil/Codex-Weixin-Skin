@@ -2,9 +2,15 @@
 
 让官方 Codex macOS 桌面应用拥有接近桌面微信的使用体验：微信绿、三栏布局、聊天气泡、会话列表、真实用户头像，以及统一适配的搜索、设置和功能页面。
 
+[![Release](https://img.shields.io/github/v/release/SnakeLil/Codex-Weixin-Skin?display_name=tag&style=flat-square&color=07c160)](https://github.com/SnakeLil/Codex-Weixin-Skin/releases/latest)
+[![macOS](https://img.shields.io/badge/macOS-12%2B-111111?style=flat-square&logo=apple)](#兼容性)
+[![License](https://img.shields.io/github/license/SnakeLil/Codex-Weixin-Skin?style=flat-square&color=07c160)](./LICENSE)
+
 [English](./README.en.md) · 简体中文
 
-![Codex 微信主题聊天界面](./docs/screenshots/chat.png)
+[**下载最新版本**](https://github.com/SnakeLil/Codex-Weixin-Skin/releases/latest/download/Codex-Weixin-Skin-v1.0.0.zip) · [安装教程](#图形化安装推荐) · [反馈问题](https://github.com/SnakeLil/Codex-Weixin-Skin/issues/new/choose)
+
+![Codex 微信主题功能演示](./docs/demo/codex-weixin-skin-demo.gif)
 
 > [!IMPORTANT]
 > 本项目是非官方主题，与 OpenAI、腾讯或微信无关联。Codex 与微信均为各自权利人的商标。
@@ -21,6 +27,8 @@
 - **随时还原**：不修改 Codex 应用文件和签名，一键恢复官方外观。
 
 ## 界面预览
+
+![Codex 微信主题聊天界面](./docs/screenshots/chat.png)
 
 | 搜索 | 设置 |
 | --- | --- |
@@ -43,11 +51,23 @@
 
 目前仅支持 macOS。Codex 更新界面结构后，主题选择器可能需要同步更新。
 
+## 兼容性
+
+| 项目 | 状态 |
+| --- | --- |
+| macOS | 12.0 或更高版本（跟随当前官方 Codex 应用要求） |
+| Apple Silicon | 已支持；v1.0.0 在 Apple Silicon + macOS 15.5 上验证 |
+| Intel Mac | 安装器包含架构自检，欢迎反馈实机结果 |
+| Codex Desktop | v1.0.0 已在 `26.715.31925` 上验证；应用更新后若出现异常请提交 Issue |
+| Windows / Linux | 暂不支持 |
+
+“已验证”表示完成了真实界面测试，不代表主题仅能用于该版本。
+
 ## 安装与使用
 
 ### 图形化安装（推荐）
 
-1. 下载本仓库并解压，或使用 Git 克隆：
+1. 从 [Releases](https://github.com/SnakeLil/Codex-Weixin-Skin/releases/latest) 下载 `Codex-Weixin-Skin-v1.0.0.zip` 并解压。开发者也可以使用 Git 克隆：
 
    ```bash
    git clone https://github.com/SnakeLil/Codex-Weixin-Skin.git
