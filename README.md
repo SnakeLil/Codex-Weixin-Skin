@@ -8,7 +8,7 @@
 
 [English](./README.en.md) · 简体中文
 
-[**下载最新版本**](https://github.com/SnakeLil/Codex-Weixin-Skin/releases/latest/download/Codex-Weixin-Skin-v1.0.0.zip) · [安装教程](#图形化安装推荐) · [反馈问题](https://github.com/SnakeLil/Codex-Weixin-Skin/issues/new/choose)
+[**下载最新版本**](https://github.com/SnakeLil/Codex-Weixin-Skin/releases/latest/download/Codex-Weixin-Skin-v1.0.0.zip) · [CodeDrobe Lite 商店版](https://codedrobe.app/zh/themes/codex-wechat-skin-lite) · [安装教程](#图形化安装推荐) · [反馈问题](https://github.com/SnakeLil/Codex-Weixin-Skin/issues/new/choose)
 
 ![Codex 微信主题功能演示](./docs/demo/codex-weixin-skin-demo.gif)
 
@@ -41,6 +41,12 @@
 | 插件 |
 | --- |
 | ![微信主题插件](./docs/screenshots/plugins.png) |
+
+## CodeDrobe Lite 商店版
+
+[Codex WeChat Skin Lite](https://codedrobe.app/zh/themes/codex-wechat-skin-lite) 是面向 CodeDrobe Desktop 的纯 CSS 轻量版本，可以从商店一键应用和恢复。它保留微信绿、聊天气泡、搜索、设置和功能页配色，且不包含可执行脚本。
+
+Lite 版适合快速体验；本仓库的完整版继续提供微信式三栏布局、真实用户头像、未读红点、深浅色预设和自定义背景等增强能力。商店版源码位于 [`integrations/codedrobe/codex-wechat-skin-lite`](./integrations/codedrobe/codex-wechat-skin-lite)。
 
 ## 环境要求
 

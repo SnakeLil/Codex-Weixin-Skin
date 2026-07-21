@@ -1,0 +1,101 @@
+{
+  "$schema": "https://codedrobe.app/schemas/theme-manifest.schema.json",
+  "schemaVersion": 1,
+  "id": "codex-wechat-skin-lite",
+  "displayName": "Codex WeChat Skin Lite",
+  "version": "1.0.0",
+  "catalog": {
+    "name": {
+      "en": "Codex WeChat Skin Lite",
+      "zh": "Codex 微信主题 Lite"
+    },
+    "description": {
+      "en": "A lightweight, CSS-only WeChat-inspired theme for Codex Desktop. It brings flat WeChat surfaces, green chat bubbles, compact search, squared controls, and page-wide styling while keeping the official app untouched. For the complete three-column layout and enhanced interactions, visit the open-source Codex-Weixin-Skin project.",
+      "zh": "面向 Codex Desktop 的轻量纯 CSS 微信风格主题：包含扁平微信界面、绿色聊天气泡、紧凑搜索框、方正控件与完整页面配色，不修改官方应用。完整三栏布局和增强交互请访问开源项目 Codex-Weixin-Skin。"
+    },
+    "categories": ["minimal", "professional"]
+  },
+  "images": {
+    "cover": "../../../docs/social-preview.png"
+  },
+  "copy": {
+    "brandTitle": "Codex WeChat Skin Lite",
+    "brandSubtitle": "A lightweight WeChat-style workspace for Codex Desktop",
+    "tagline": "Turn Codex into a familiar WeChat-style workspace",
+    "signature": "Codex WeChat Skin Lite · SnakeLil"
+  },
+  "targets": {
+    "codex": {
+      "css": "codex.css",
+      "options": {
+        "rendererProfile": "codex-theme-v1",
+        "baseTheme": {
+          "mode": "light",
+          "codeTheme": "codex",
+          "accent": "#07C160",
+          "contrast": 82,
+          "ink": "#191919",
+          "surface": "#F2F2F2",
+          "opaqueWindows": true,
+          "fonts": {
+            "macCode": "SF Mono",
+            "macUi": "PingFang SC",
+            "windowsCode": "Cascadia Code",
+            "windowsUi": "Microsoft YaHei UI"
+          },
+          "semanticColors": {
+            "diffAdded": "#D8F3DF",
+            "diffRemoved": "#FFE0E0",
+            "skill": "#07C160"
+          }
+        }
+      },
+      "verification": {
+        "required": [
+          {
+            "name": "app-shell",
+            "any": ["main.main-surface"]
+          },
+          {
+            "name": "session-sidebar",
+            "any": ["aside.app-shell-left-panel"]
+          }
+        ],
+        "contexts": [
+          {
+            "name": "home",
+            "when": {
+              "any": ["[role='main']:has([data-testid='home-icon'])"]
+            },
+            "recommended": [
+              {
+                "name": "home-suggestions",
+                "any": [".group\\/home-suggestions"]
+              },
+              {
+                "name": "home-project-selector",
+                "any": [".group\\/project-selector"]
+              }
+            ]
+          },
+          {
+            "name": "conversation",
+            "when": {
+              "any": ["main.main-surface:has([data-app-action-timeline-scroll])"]
+            },
+            "recommended": [
+              {
+                "name": "conversation-composer",
+                "any": [".composer-surface-chrome"]
+              },
+              {
+                "name": "conversation-message",
+                "any": ["[data-content-search-unit-key$=':assistant']", "[data-message-author-role]"]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

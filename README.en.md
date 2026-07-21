@@ -8,7 +8,7 @@ Bring a desktop-WeChat-inspired experience to the official Codex app for macOS: 
 
 English · [简体中文](./README.md)
 
-[**Download the latest release**](https://github.com/SnakeLil/Codex-Weixin-Skin/releases/latest/download/Codex-Weixin-Skin-v1.0.0.zip) · [Install guide](#graphical-install-recommended) · [Report an issue](https://github.com/SnakeLil/Codex-Weixin-Skin/issues/new/choose)
+[**Download the latest release**](https://github.com/SnakeLil/Codex-Weixin-Skin/releases/latest/download/Codex-Weixin-Skin-v1.0.0.zip) · [CodeDrobe Lite store edition](https://codedrobe.app/en/themes/codex-wechat-skin-lite) · [Install guide](#graphical-install-recommended) · [Report an issue](https://github.com/SnakeLil/Codex-Weixin-Skin/issues/new/choose)
 
 ![Codex WeChat Skin feature demo](./docs/demo/codex-weixin-skin-demo.gif)
 
@@ -41,6 +41,12 @@ English · [简体中文](./README.md)
 | Plugins |
 | --- |
 | ![Themed Plugins page](./docs/screenshots/plugins.png) |
+
+## CodeDrobe Lite store edition
+
+[Codex WeChat Skin Lite](https://codedrobe.app/en/themes/codex-wechat-skin-lite) is a CSS-only edition for CodeDrobe Desktop that can be applied and restored directly from the store. It retains the WeChat-green palette, chat bubbles, search, settings, and feature-page styling without executable scripts.
+
+Choose Lite for a quick, low-friction preview. The full edition in this repository continues to provide the WeChat-style three-column shell, real user avatars, unread dots, light/dark presets, and custom wallpaper support. Its store-edition source lives in [`integrations/codedrobe/codex-wechat-skin-lite`](./integrations/codedrobe/codex-wechat-skin-lite).
 
 ## Requirements
 

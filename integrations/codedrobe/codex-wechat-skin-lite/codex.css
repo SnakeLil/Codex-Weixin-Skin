@@ -1,0 +1,708 @@
+/*
+ * Codex WeChat Skin Lite for CodeDrobe
+ *
+ * This store edition is intentionally CSS-only. It keeps Codex's native DOM
+ * and behavior intact while carrying the visual language of the full
+ * Codex-Weixin-Skin project: WeChat green, flat grey surfaces, compact square
+ * controls, conversation bubbles, and calm utility pages.
+ */
+
+:root.codedrobe-host-codex {
+  color-scheme: light !important;
+
+  --wx-green: #07c160;
+  --wx-lime: #95ec69;
+  --wx-cyan: #10aeff;
+  --wx-red: #fa5151;
+  --wx-green-rgb: 7 193 96;
+
+  --wxs-bg: #ededed;
+  --wxs-panel: #ffffff;
+  --wxs-panel-2: #f7f7f7;
+  --wxs-header: #f5f5f5;
+  --wxs-composer: #f7f7f7;
+  --wxs-selected: #dedede;
+  --wxs-hover: #e9e9e9;
+  --wxs-text: #191919;
+  --wxs-subtext: #5e5e5e;
+  --wxs-muted: #8f8f8f;
+  --wxs-line: rgba(0, 0, 0, .07);
+  --wxs-line-strong: rgba(0, 0, 0, .12);
+  --wxs-received: #ffffff;
+  --wxs-received-text: #191919;
+  --wxs-sent: #95ec69;
+  --wxs-sent-text: #0b160a;
+  --wxs-radius: 4px;
+  --wxs-shadow: 0 1px 1px rgba(0, 0, 0, .025);
+  --wxs-sidebar-width: 292px;
+
+  --color-token-bg-primary: var(--wxs-bg) !important;
+  --color-token-bg-secondary: var(--wxs-panel) !important;
+  --color-token-main-surface-primary: var(--wxs-bg) !important;
+  --color-token-side-bar-background: var(--wxs-panel-2) !important;
+  --color-token-foreground: var(--wxs-text) !important;
+  --color-token-text-primary: var(--wxs-text) !important;
+  --color-token-text-secondary: var(--wxs-subtext) !important;
+  --color-token-border: var(--wxs-line-strong) !important;
+  --color-token-input-background: var(--wxs-panel) !important;
+  --color-token-input-border: var(--wxs-line-strong) !important;
+  --color-token-list-hover-background: var(--wxs-hover) !important;
+  --color-token-list-active-selection-background: var(--wxs-selected) !important;
+  --color-token-link: var(--wx-cyan) !important;
+  --color-token-primary: var(--wx-green) !important;
+  --color-token-focus-border: rgb(var(--wx-green-rgb) / .62) !important;
+}
+
+html.codedrobe-host-codex body {
+  background: var(--wxs-bg) !important;
+  color: var(--wxs-text) !important;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC",
+    "Microsoft YaHei", "Segoe UI", system-ui, sans-serif !important;
+}
+
+html.codedrobe-host-codex body::before {
+  content: none !important;
+}
+
+/* CodeDrobe's renderer profile uses this inert chrome host for theme markers. */
+#codedrobe-codex-skin-chrome {
+  display: contents !important;
+  pointer-events: none;
+}
+
+/* App shell and the native Codex sidebar become a WeChat session list. */
+html.codedrobe-host-codex aside.app-shell-left-panel {
+  width: var(--wxs-sidebar-width) !important;
+  min-width: var(--wxs-sidebar-width) !important;
+  background: var(--wxs-panel-2) !important;
+  border: 0 !important;
+  border-right: 1px solid var(--wxs-line) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  color: var(--wxs-text) !important;
+  backdrop-filter: none !important;
+}
+
+html.codedrobe-host-codex aside.app-shell-left-panel > .max-w-full,
+html.codedrobe-host-codex aside.app-shell-left-panel nav {
+  width: 100% !important;
+  min-width: 100% !important;
+  background: var(--wxs-panel-2) !important;
+}
+
+html.codedrobe-host-codex aside.app-shell-left-panel nav {
+  --padding-row-x: 10px !important;
+  --padding-row-cell-x: 10px !important;
+  --radius-token-row: 4px !important;
+}
+
+html.codedrobe-host-codex aside.app-shell-left-panel :is(button, a) {
+  color: var(--wxs-text) !important;
+  border-radius: 5px !important;
+  transition: background-color .14s ease, color .14s ease !important;
+}
+
+html.codedrobe-host-codex aside.app-shell-left-panel :is(button, a):hover {
+  background: var(--wxs-hover) !important;
+  color: var(--wxs-text) !important;
+  transform: none !important;
+}
+
+/* The stock account title is too wide beside the expanded search control.
+   Collapse it into the compact square identity used by desktop WeChat. */
+html.codedrobe-host-codex aside.app-shell-left-panel
+  button:has(> span.font-openai-sans.font-semibold) {
+  display: grid !important;
+  place-items: center !important;
+  flex: 0 0 36px !important;
+  width: 36px !important;
+  min-width: 36px !important;
+  height: 34px !important;
+  margin-right: 8px !important;
+  padding: 0 !important;
+  border-radius: 4px !important;
+  background: var(--wx-green) !important;
+}
+
+html.codedrobe-host-codex aside.app-shell-left-panel
+  button:has(> span.font-openai-sans.font-semibold) > span {
+  font-size: 0 !important;
+}
+
+html.codedrobe-host-codex aside.app-shell-left-panel
+  button:has(> span.font-openai-sans.font-semibold) > span::after {
+  content: "微";
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+html.codedrobe-host-codex aside.app-shell-left-panel
+  button:has(> span.font-openai-sans.font-semibold) svg {
+  display: none !important;
+}
+
+html.codedrobe-host-codex aside.app-shell-left-panel svg {
+  color: var(--wxs-subtext) !important;
+}
+
+html.codedrobe-host-codex aside.app-shell-left-panel :is(
+  [class~="bg-token-list-hover-background"],
+  [aria-current="page"]
+) {
+  background: var(--wxs-selected) !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  color: var(--wxs-text) !important;
+}
+
+html.codedrobe-host-codex aside.app-shell-left-panel [aria-current="page"] svg {
+  color: var(--wx-green) !important;
+}
+
+html.codedrobe-host-codex aside.app-shell-left-panel [class*="text-token-foreground"] {
+  color: var(--wxs-text) !important;
+}
+
+html.codedrobe-host-codex aside.app-shell-left-panel [class*="text-token-input-placeholder-foreground"],
+html.codedrobe-host-codex aside.app-shell-left-panel [class*="text-token-description"] {
+  color: var(--wxs-muted) !important;
+}
+
+/* Native search + mode controls read like WeChat's search and square add row. */
+html.codedrobe-host-codex aside.app-shell-left-panel :is(
+  button[aria-label="搜索"],
+  button[aria-label="Search"]
+) {
+  display: flex !important;
+  flex: 1 1 auto !important;
+  justify-content: flex-start !important;
+  height: 34px !important;
+  padding: 0 10px !important;
+  border-radius: 4px !important;
+  background: var(--wxs-hover) !important;
+  color: var(--wxs-muted) !important;
+}
+
+html.codedrobe-host-codex aside.app-shell-left-panel :is(
+  button[aria-label="搜索"],
+  button[aria-label="Search"]
+)::after {
+  content: "搜索 / Search";
+  margin-left: 7px;
+  color: var(--wxs-muted);
+  font-size: 13px;
+  font-weight: 400;
+}
+
+html.codedrobe-host-codex aside.app-shell-left-panel :is(
+  button[aria-label^="切换模式"],
+  button[aria-label^="Switch mode"]
+) {
+  display: grid !important;
+  place-items: center !important;
+  flex: 0 0 36px !important;
+  width: 36px !important;
+  min-width: 36px !important;
+  height: 34px !important;
+  margin-left: 8px !important;
+  padding: 0 !important;
+  border-radius: 4px !important;
+  background: var(--wxs-hover) !important;
+}
+
+/* Project groups become two-line session cells with a tiny WeChat avatar. */
+html.codedrobe-host-codex aside.app-shell-left-panel [role="listitem"][data-sidebar-project-kind] {
+  position: relative !important;
+  min-height: 62px !important;
+  padding-left: 48px !important;
+  border-bottom: 1px solid var(--wxs-line) !important;
+}
+
+html.codedrobe-host-codex aside.app-shell-left-panel [role="listitem"][data-sidebar-project-kind]::before {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  left: 7px;
+  top: 9px;
+  width: 36px;
+  height: 36px;
+  border-radius: 4px;
+  background:
+    radial-gradient(circle at 35% 38%, #fff 0 3px, transparent 3.5px),
+    radial-gradient(circle at 63% 38%, #fff 0 3px, transparent 3.5px),
+    linear-gradient(145deg, #18c76f, #06ae56);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .04);
+}
+
+/* Workspace and header stay flat; remove Codex's translucent utility fades. */
+html.codedrobe-host-codex main.main-surface {
+  position: relative !important;
+  isolation: isolate;
+  overflow: hidden !important;
+  background: var(--wxs-bg) !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  --thread-content-max-width: min(860px, calc(100% - 88px));
+}
+
+html.codedrobe-host-codex main.main-surface > header.app-header-tint,
+html.codedrobe-host-codex header.app-header-tint {
+  left: var(--wxs-sidebar-width) !important;
+  right: 0 !important;
+  width: auto !important;
+  background: var(--wxs-header) !important;
+  border-bottom: 1px solid var(--wxs-line-strong) !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  color: var(--wxs-text) !important;
+}
+
+html.codedrobe-host-codex header.app-header-tint svg {
+  color: var(--wxs-subtext) !important;
+}
+
+html.codedrobe-host-codex .app-shell-main-content-top-fade,
+html.codedrobe-host-codex [class*="after:bg-linear-to-b"]::after {
+  content: none !important;
+  background: none !important;
+  opacity: 0 !important;
+}
+
+html.codedrobe-host-codex main.main-surface [role="main"] {
+  background: transparent !important;
+  color: var(--wxs-text) !important;
+}
+
+/* Sent message: WeChat green, square corners, small tail and local avatar. */
+html.codedrobe-host-codex [data-user-message-bubble="true"] {
+  position: relative !important;
+  max-width: 72% !important;
+  overflow: visible !important;
+  padding: 9px 12px !important;
+  border: 1px solid rgba(0, 0, 0, .025) !important;
+  border-radius: var(--wxs-radius) !important;
+  background: var(--wxs-sent) !important;
+  color: var(--wxs-sent-text) !important;
+  line-height: 1.55 !important;
+  box-shadow: var(--wxs-shadow) !important;
+}
+
+html.codedrobe-host-codex [data-user-message-bubble="true"] * {
+  color: var(--wxs-sent-text) !important;
+}
+
+html.codedrobe-host-codex [data-user-message-bubble="true"]::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  right: -5px;
+  top: 13px;
+  width: 10px;
+  height: 10px;
+  border-radius: 1px;
+  background: var(--wxs-sent);
+  transform: rotate(45deg);
+}
+
+html.codedrobe-host-codex :is(
+  [data-user-message-bubble="true"],
+  [data-message-author-role="user"]:not(:has([data-user-message-bubble="true"]))
+)::before {
+  content: "我";
+  position: absolute;
+  right: -50px;
+  top: 0;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 4px;
+  background: #576b95;
+  color: #fff !important;
+  font-size: 13px;
+  font-weight: 650;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .06);
+}
+
+/* Received message: white WeChat bubble with an AI contact avatar. */
+html.codedrobe-host-codex [data-content-search-unit-key$=":assistant"] {
+  position: relative !important;
+  width: fit-content !important;
+  max-width: 72% !important;
+  margin-right: auto !important;
+  padding: 9px 12px !important;
+  border: 1px solid rgba(0, 0, 0, .025) !important;
+  border-radius: var(--wxs-radius) !important;
+  background: var(--wxs-received) !important;
+  color: var(--wxs-received-text) !important;
+  line-height: 1.55 !important;
+  box-shadow: var(--wxs-shadow) !important;
+}
+
+html.codedrobe-host-codex [data-content-search-unit-key$=":assistant"]::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: -5px;
+  top: 13px;
+  width: 10px;
+  height: 10px;
+  border-radius: 1px;
+  background: var(--wxs-received);
+  transform: rotate(45deg);
+}
+
+html.codedrobe-host-codex [data-content-search-unit-key$=":assistant"]::before {
+  content: "AI";
+  position: absolute;
+  left: -50px;
+  top: 0;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 4px;
+  background: var(--wx-green);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 750;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .06);
+}
+
+html.codedrobe-host-codex [data-message-author-role] {
+  position: relative;
+  width: fit-content !important;
+  max-width: 78% !important;
+  padding: 8px 12px !important;
+  border-radius: var(--wxs-radius) !important;
+  line-height: 1.55 !important;
+  box-shadow: var(--wxs-shadow) !important;
+}
+
+html.codedrobe-host-codex [data-message-author-role="assistant"] {
+  margin-right: auto !important;
+  background: var(--wxs-received) !important;
+  color: var(--wxs-received-text) !important;
+}
+
+html.codedrobe-host-codex [data-message-author-role="user"] {
+  margin-left: auto !important;
+  background: var(--wxs-sent) !important;
+  color: var(--wxs-sent-text) !important;
+}
+
+html.codedrobe-host-codex [data-message-author-role="user"] * {
+  color: var(--wxs-sent-text) !important;
+}
+
+html.codedrobe-host-codex [data-content-search-unit-key$=":assistant"] :is(pre, code),
+html.codedrobe-host-codex [data-message-author-role="assistant"] :is(pre, code) {
+  border-radius: 3px !important;
+  background: var(--wxs-panel-2) !important;
+}
+
+html.codedrobe-host-codex [data-message-author-role="user"] :is(pre, code) {
+  border-radius: 3px !important;
+  background: rgba(0, 0, 0, .1) !important;
+  color: #0b160a !important;
+}
+
+/* Composer: a flat WeChat editor area instead of a floating glass pill. */
+html.codedrobe-host-codex .composer-surface-chrome {
+  overflow: visible !important;
+  min-height: 112px !important;
+  padding: 12px 24px 8px !important;
+  border: 0 !important;
+  border-top: 1px solid var(--wxs-line) !important;
+  border-radius: 0 !important;
+  background: var(--wxs-composer) !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+html.codedrobe-host-codex .composer-surface-chrome::before {
+  content: none !important;
+}
+
+html.codedrobe-host-codex [data-thread-scroll-footer="true"] {
+  padding-bottom: 0 !important;
+  border-top: 1px solid var(--wxs-line-strong) !important;
+  background: var(--wxs-composer) !important;
+}
+
+html.codedrobe-host-codex [data-pip-obstacle="thread-footer"],
+html.codedrobe-host-codex [data-codex-composer-root] {
+  width: 100% !important;
+  max-width: none !important;
+  padding-inline: 0 !important;
+}
+
+html.codedrobe-host-codex .ProseMirror {
+  min-height: 42px !important;
+  color: var(--wxs-text) !important;
+  caret-color: var(--wx-green) !important;
+}
+
+html.codedrobe-host-codex .composer-surface-chrome p.placeholder::after {
+  color: var(--wxs-muted) !important;
+  opacity: 1 !important;
+}
+
+html.codedrobe-host-codex .composer-surface-chrome button:not([class~="bg-token-foreground"]) {
+  color: var(--wxs-subtext) !important;
+}
+
+html.codedrobe-host-codex .composer-surface-chrome button:not([class~="bg-token-foreground"]):hover {
+  color: var(--wx-green) !important;
+  background: rgb(var(--wx-green-rgb) / .1) !important;
+}
+
+html.codedrobe-host-codex button[class~="bg-token-foreground"] {
+  background: var(--wx-green) !important;
+  color: #fff !important;
+  box-shadow: none !important;
+}
+
+html.codedrobe-host-codex button[class~="bg-token-foreground"] * {
+  color: #fff !important;
+}
+
+/* Keep Codex's pinned summary reservation and the composer aligned. */
+html.codedrobe-host-codex
+  [style*="--thread-wide-block-inline-shift"]
+  > [data-thread-scroll-footer="true"] {
+  transform: translateX(var(--thread-wide-block-inline-shift, 0px)) !important;
+  width: calc(
+    100%
+    - var(--thread-wide-block-inline-shift, 0px)
+    - var(--thread-wide-block-inline-shift, 0px)
+  ) !important;
+}
+
+html.codedrobe-host-codex main.main-surface:has(
+  [class~="origin-top-right"]:not([style*="opacity: 0"])
+) [style*="--thread-wide-block-inline-shift"] {
+  --thread-content-max-width: max(
+    320px,
+    min(
+      860px,
+      calc(
+        100%
+        - var(--thread-wide-block-inline-shift, 0px)
+        - var(--thread-wide-block-inline-shift, 0px)
+        - 32px
+      )
+    )
+  );
+}
+
+/* Home uses native landmarks so this CSS remains useful without a script. */
+html.codedrobe-host-codex [role="main"]:has([data-testid="home-icon"]) {
+  background: var(--wxs-bg) !important;
+}
+
+html.codedrobe-host-codex [role="main"]:has([data-testid="home-icon"])
+  > div:first-child > div:first-child > div:first-child {
+  min-height: 132px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+html.codedrobe-host-codex [role="main"]:has([data-testid="home-icon"])
+  [data-testid="home-icon"] {
+  color: var(--wx-green) !important;
+}
+
+html.codedrobe-host-codex .group\/home-suggestions > * {
+  min-height: 92px !important;
+  padding: 14px !important;
+  border: 1px solid var(--wxs-line) !important;
+  border-radius: 8px !important;
+  background: var(--wxs-panel) !important;
+  color: var(--wxs-text) !important;
+  box-shadow: var(--wxs-shadow) !important;
+  backdrop-filter: none !important;
+  transition: background-color .14s ease, border-color .14s ease !important;
+}
+
+html.codedrobe-host-codex .group\/home-suggestions > *:hover {
+  transform: none !important;
+  border-color: rgb(var(--wx-green-rgb) / .38) !important;
+  background: var(--wxs-panel-2) !important;
+}
+
+html.codedrobe-host-codex .group\/home-suggestions svg {
+  color: var(--wx-green) !important;
+}
+
+html.codedrobe-host-codex .group\/project-selector > button {
+  border: 1px solid var(--wxs-line) !important;
+  border-radius: 6px !important;
+  background: var(--wxs-panel) !important;
+  color: var(--wxs-text) !important;
+  box-shadow: none !important;
+}
+
+/* Search, menus, dialogs, and settings controls share quiet square surfaces. */
+html.codedrobe-host-codex input[type="checkbox"],
+html.codedrobe-host-codex input[type="radio"] {
+  accent-color: var(--wx-green) !important;
+}
+
+html.codedrobe-host-codex [role="switch"][aria-checked="true"] > span,
+html.codedrobe-host-codex [role="switch"][aria-checked="true"] [class*="charts-blue"] {
+  background-color: var(--wx-green) !important;
+  background-image: none !important;
+}
+
+html.codedrobe-host-codex :is([role="dialog"], [role="menu"], [role="listbox"]) {
+  border: 1px solid var(--wxs-line-strong) !important;
+  border-radius: 6px !important;
+  background: var(--wxs-panel-2) !important;
+  color: var(--wxs-text) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .12) !important;
+  backdrop-filter: none !important;
+}
+
+html.codedrobe-host-codex :is(input:not([type]), input[type="text"], input[type="search"], textarea) {
+  border-color: var(--wxs-line-strong) !important;
+  border-radius: 4px !important;
+  background: var(--wxs-panel) !important;
+  color: var(--wxs-text) !important;
+}
+
+html.codedrobe-host-codex .codex-dialog-overlay[data-state="open"]:has(+ .global-command-menu-dialog) {
+  background: rgba(0, 0, 0, .14) !important;
+  backdrop-filter: none !important;
+}
+
+html.codedrobe-host-codex .global-command-menu-dialog {
+  top: 92px !important;
+  width: min(520px, calc(100vw - 32px)) !important;
+  max-width: none !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 10px !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+}
+
+html.codedrobe-host-codex .global-command-menu-dialog > [cmdk-root] {
+  display: flex !important;
+  flex-direction: column !important;
+  width: 100% !important;
+  max-height: min(590px, calc(100vh - 124px)) !important;
+  padding: 10px 10px 8px !important;
+  border: 1px solid var(--wxs-line-strong) !important;
+  border-radius: 10px !important;
+  background: var(--wxs-panel) !important;
+  box-shadow: 0 18px 44px rgba(0, 0, 0, .18) !important;
+  overflow: hidden !important;
+}
+
+html.codedrobe-host-codex .global-command-menu-dialog [cmdk-input] {
+  width: 100% !important;
+  height: 40px !important;
+  padding: 0 14px 0 38px !important;
+  border: 0 !important;
+  border-radius: 6px !important;
+  outline: 0 !important;
+  background-color: var(--wxs-hover) !important;
+  color: var(--wxs-text) !important;
+  font-size: 14px !important;
+  box-shadow: none !important;
+}
+
+html.codedrobe-host-codex .global-command-menu-dialog [cmdk-list] {
+  width: 100% !important;
+  max-height: min(520px, calc(100vh - 184px)) !important;
+  margin-top: 8px !important;
+  padding: 0 3px 4px !important;
+  border: 0 !important;
+  background: transparent !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+}
+
+html.codedrobe-host-codex .global-command-menu-dialog [cmdk-group-heading] > span {
+  padding: 10px 9px 5px !important;
+  color: var(--wxs-muted) !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+}
+
+html.codedrobe-host-codex .global-command-menu-dialog [cmdk-item] {
+  min-height: 38px !important;
+  margin: 1px 0 !important;
+  padding: 7px 9px !important;
+  border-radius: 6px !important;
+  color: var(--wxs-text) !important;
+  font-size: 14px !important;
+}
+
+html.codedrobe-host-codex .global-command-menu-dialog [cmdk-item][data-selected="true"] {
+  background: rgb(var(--wx-green-rgb) / .11) !important;
+}
+
+html.codedrobe-host-codex .global-command-menu-dialog [cmdk-item][data-selected="true"] svg {
+  color: var(--wx-green) !important;
+}
+
+html.codedrobe-host-codex .global-command-menu-dialog kbd {
+  min-width: 26px !important;
+  padding: 3px 6px !important;
+  border: 0 !important;
+  border-radius: 9px !important;
+  background: rgba(0, 0, 0, .055) !important;
+  color: var(--wxs-muted) !important;
+  font-size: 11px !important;
+  box-shadow: none !important;
+}
+
+html.codedrobe-host-codex :is(pre, table, blockquote) {
+  border-color: var(--wxs-line-strong) !important;
+  border-radius: 4px !important;
+}
+
+html.codedrobe-host-codex :is(button, [role="button"]):focus-visible,
+html.codedrobe-host-codex :is(a, input, textarea, [contenteditable="true"]):focus-visible {
+  outline: 2px solid rgb(var(--wx-green-rgb) / .68) !important;
+  outline-offset: 2px !important;
+}
+
+html.codedrobe-host-codex * {
+  scrollbar-color: rgba(0, 0, 0, .2) transparent;
+}
+
+@media (min-width: 921px) and (max-width: 1440px) {
+  html.codedrobe-host-codex main.main-surface {
+    --thread-content-max-width: min(800px, calc(100% - 112px));
+  }
+}
+
+@media (max-width: 920px) {
+  :root.codedrobe-host-codex {
+    --wxs-sidebar-width: 246px;
+  }
+
+  html.codedrobe-host-codex main.main-surface {
+    --thread-content-max-width: calc(100% - 56px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.codedrobe-host-codex *,
+  html.codedrobe-host-codex *::before,
+  html.codedrobe-host-codex *::after {
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
