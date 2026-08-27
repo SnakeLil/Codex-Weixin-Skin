@@ -4,9 +4,15 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "doctor": "./scripts/doctor-macos.sh"
+    "doctor": "./scripts/doctor-macos.sh",
+    "check:source": "./scripts/check-source-macos.sh",
+    "test:compatibility": "node --test tests/compatibility-contract.test.mjs",
+    "test": "npm run check:source && npm run test:compatibility"
   },
   "engines": {
     "node": ">=20"
+  },
+  "devDependencies": {
+    "playwright": "1.62.1"
   }
 }

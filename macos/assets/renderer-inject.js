@@ -5,6 +5,10 @@
   const CHROME_ID = "codex-weixin-skin-chrome";
   const SHELL_ATTR = "data-weixin-shell";
   const SETTINGS_ATTR = "data-weixin-settings-open";
+  const PAGE_ATTR = "data-weixin-page";
+  const SEARCH_ATTR = "data-weixin-search-open";
+  const SUMMARY_ATTR = "data-weixin-summary-open";
+  const synchronizeWeixinRouteState = __WEIXIN_SKIN_ROUTE_STATE_SYNC__;
   const ART_ATTRS = [
     "data-weixin-art-wide", "data-weixin-art-safe", "data-weixin-task-mode",
     "data-weixin-art-safe-area", "data-weixin-art-task-mode", "data-weixin-art-aspect",
@@ -590,32 +594,8 @@
     const root = document.documentElement;
     if (!root) return;
     shell ||= root.getAttribute(SHELL_ATTR) || resolvedShell();
-    const shellMain = document.querySelector("main.main-surface") || document.querySelector("main");
-    const settingsPanel = [...document.querySelectorAll(".app-shell-left-panel")].find(
-      (candidate) => candidate.tagName !== "ASIDE" &&
-        candidate.querySelector('input[role="searchbox"]'),
-    );
-    if (settingsPanel) {
-      setAttribute(root, SETTINGS_ATTR, "true");
-    } else {
-      root.removeAttribute(SETTINGS_ATTR);
-    }
-    const homeIndicator = document.querySelector('[data-testid="home-icon"]');
-    const home = homeIndicator?.closest('[role="main"]') ||
-      [...document.querySelectorAll('[role="main"]')].find((candidate) =>
-        candidate.querySelector('[data-feature="game-source"]') &&
-        candidate.querySelector('[class*="home-suggestions"]')) || null;
-    for (const candidate of document.querySelectorAll('[role="main"].weixin-skin-home')) {
-      if (candidate !== home) candidate.classList.remove("weixin-skin-home");
-    }
-    if (home) home.classList.add("weixin-skin-home");
-    const homeUtilityBars = new Set(home
-      ? home.querySelectorAll('[class*="_homeUtilityBar_"]')
-      : []);
-    for (const candidate of document.querySelectorAll(".weixin-skin-home-utility")) {
-      if (!homeUtilityBars.has(candidate)) candidate.classList.remove("weixin-skin-home-utility");
-    }
-    for (const candidate of homeUtilityBars) candidate.classList.add("weixin-skin-home-utility");
+    const routeState = synchronizeWeixinRouteState(document);
+    const { shellMain, home, utilityPage, currentPageLabel } = routeState;
 
     if (!shellMain || !document.body) return;
     syncProjectUnreadState();
@@ -772,20 +752,6 @@
       navrail.addEventListener("click", navrail.__weixinSkinClickHandler);
       navrail.__weixinSkinHandlerRevision = PAYLOAD_REVISION;
     }
-    const currentNativePage = document.querySelector(
-      'aside.app-shell-left-panel [aria-current="page"]',
-    );
-    const currentPageLabel = currentNativePage?.textContent?.trim().toLowerCase() || "";
-    const utilityPage = currentPageLabel.includes("插件") || currentPageLabel.includes("plugin")
-      ? "plugins"
-      : currentPageLabel.includes("站点") || currentPageLabel.includes("site")
-        ? "sites"
-        : currentPageLabel.includes("已安排") || currentPageLabel.includes("scheduled")
-          ? "scheduled"
-          : null;
-    for (const page of ["sites", "scheduled", "plugins"]) {
-      shellMain.classList.toggle(`weixin-skin-page-${page}`, utilityPage === page);
-    }
     if (navrail) {
       let activeRailAction = "new-task";
       if (currentPageLabel.includes("插件") || currentPageLabel.includes("plugin")) {
@@ -833,12 +799,17 @@
     document.documentElement?.classList.remove("codex-weixin-skin");
     document.documentElement?.removeAttribute(SHELL_ATTR);
     document.documentElement?.removeAttribute(SETTINGS_ATTR);
+    document.documentElement?.removeAttribute(PAGE_ATTR);
+    document.documentElement?.removeAttribute(SEARCH_ATTR);
+    document.documentElement?.removeAttribute(SUMMARY_ATTR);
     for (const name of ART_ATTRS) document.documentElement?.removeAttribute(name);
     document.documentElement?.style.removeProperty("--weixin-skin-art");
     for (const name of THEME_VARIABLES) document.documentElement?.style.removeProperty(name);
     document.querySelectorAll(".weixin-skin-home").forEach((node) => node.classList.remove("weixin-skin-home"));
     document.querySelectorAll(".weixin-skin-home-shell").forEach((node) => node.classList.remove("weixin-skin-home-shell"));
     document.querySelectorAll(".weixin-skin-home-utility").forEach((node) => node.classList.remove("weixin-skin-home-utility"));
+    document.querySelectorAll(".weixin-skin-settings-content").forEach((node) => node.classList.remove("weixin-skin-settings-content"));
+    document.querySelectorAll(".weixin-skin-summary-panel").forEach((node) => node.classList.remove("weixin-skin-summary-panel"));
     document.getElementById(STYLE_ID)?.remove();
     document.getElementById(CHROME_ID)?.remove();
     state?.observer?.disconnect();

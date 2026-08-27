@@ -1,0 +1,41 @@
+name: Theme compatibility
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  regression:
+    runs-on: macos-14
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: macos/package-lock.json
+      - name: Install test dependencies
+        working-directory: macos
+        run: npm ci --omit=optional --ignore-scripts --no-audit
+      - name: Install isolated browser runtime
+        working-directory: macos
+        run: npx playwright install chromium
+      - name: Check source and compatibility contracts
+        working-directory: macos
+        run: npm test
+      - name: Pack the CodeDrobe Lite edition
+        run: >-
+          npx -y @codedrobe/core@0.6.1 theme pack
+          integrations/codedrobe/codex-wechat-skin-lite/theme.json
+          --output "$RUNNER_TEMP/codex-wechat-skin-lite.codedrobe-theme"
+          --force
+      - name: Inspect the CodeDrobe Lite package
+        run: >-
+          npx -y @codedrobe/core@0.6.1 theme inspect
+          "$RUNNER_TEMP/codex-wechat-skin-lite.codedrobe-theme"

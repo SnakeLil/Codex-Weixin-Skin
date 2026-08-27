@@ -8,6 +8,7 @@ README.preview.html
 docs/readme-preview.html
 release/
 runtime/
+node_modules/
 
 # Local WeChat reference screenshots are not redistributable project assets.
 weixin-screenshot/

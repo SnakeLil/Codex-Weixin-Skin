@@ -6,6 +6,11 @@ import path from "node:path";
 import { promisify } from "node:util";
 import { fileURLToPath } from "node:url";
 import { readImageMetadata } from "./image-metadata.mjs";
+import {
+  COMPATIBILITY_CONTEXTS,
+  COMPATIBILITY_CONTRACT_VERSION,
+  evaluateCompatibilityContracts,
+} from "./compatibility-contract.mjs";
 
 const execFileAsync = promisify(execFile);
 const scriptPath = fileURLToPath(import.meta.url);
@@ -591,13 +596,18 @@ async function loadStaticPayloadAssets() {
     staticPayloadAssets = Promise.all([
       fs.readFile(path.join(root, "assets", "weixin-skin.css"), "utf8"),
       fs.readFile(path.join(root, "assets", "renderer-inject.js"), "utf8"),
+      fs.readFile(path.join(root, "assets", "route-state.mjs"), "utf8"),
     ]).catch((error) => {
       staticPayloadAssets = null;
       throw error;
     });
   }
-  const [css, template] = await staticPayloadAssets;
-  return { css, template, cacheHit };
+  const [css, template, routeStateModule] = await staticPayloadAssets;
+  const routeStateSource = routeStateModule.replace(
+    "export function synchronizeWeixinRouteState",
+    "function synchronizeWeixinRouteState",
+  ).trim();
+  return { css, template, routeStateModule, routeStateSource, cacheHit };
 }
 
 function invalidateStaticPayloadAssets() {
@@ -610,7 +620,7 @@ async function loadPayload(themeDir) {
     loadStaticPayloadAssets(),
     loadTheme(themeDir),
   ]);
-  const { css, template } = staticAssets;
+  const { css, template, routeStateModule, routeStateSource } = staticAssets;
   const { art, extension, theme } = loaded;
   const styleRevision = createHash("sha256").update(css).digest("hex").slice(0, 20);
   const artMetadata = readImageMetadata(art, extension);
@@ -627,6 +637,7 @@ async function loadPayload(themeDir) {
     .update(SKIN_VERSION)
     .update(css)
     .update(template)
+    .update(routeStateModule)
     .update(JSON.stringify(theme))
     .digest("hex")
     .slice(0, 20);
@@ -634,6 +645,7 @@ async function loadPayload(themeDir) {
     .replace("__WEIXIN_SKIN_CSS_JSON__", JSON.stringify(css))
     .replace("__WEIXIN_SKIN_ART_JSON__", JSON.stringify(artDataUrl))
     .replace("__WEIXIN_SKIN_THEME_JSON__", JSON.stringify(theme))
+    .replace("__WEIXIN_SKIN_ROUTE_STATE_SYNC__", `(${routeStateSource})`)
     .replace("__WEIXIN_SKIN_VERSION_JSON__", JSON.stringify(SKIN_VERSION))
     .replace("__WEIXIN_SKIN_STYLE_REVISION_JSON__", JSON.stringify(styleRevision))
     .replace("__WEIXIN_SKIN_PAYLOAD_REVISION_JSON__", JSON.stringify(revision));
@@ -840,6 +852,10 @@ async function verifyRemovedSession(session) {
 
 async function verifySession(session, expectedThemeId = null, expectedRevision = null) {
   return session.evaluate(`(() => {
+    const compatibility = (${evaluateCompatibilityContracts.toString()})(
+      ${JSON.stringify(COMPATIBILITY_CONTEXTS)},
+      (selector) => Boolean(document.querySelector(selector)),
+    );
     const box = (node) => {
       if (!node) return null;
       const r = node.getBoundingClientRect();
@@ -935,6 +951,10 @@ async function verifySession(session, expectedThemeId = null, expectedRevision =
         x: document.documentElement.scrollWidth > document.documentElement.clientWidth,
         y: document.documentElement.scrollHeight > document.documentElement.clientHeight,
       },
+      compatibility: {
+        ...compatibility,
+        contractVersion: ${JSON.stringify(COMPATIBILITY_CONTRACT_VERSION)},
+      },
     };
     const bubblePass = (!result.userBubble || result.userBubble.colorsMatch) &&
       (!result.assistantBubble || result.assistantBubble.colorsMatch);
@@ -948,6 +968,7 @@ async function verifySession(session, expectedThemeId = null, expectedRevision =
       result.stylePresent && result.chromePresent && result.chromePointerEvents === 'none' &&
       Boolean(result.shell?.visible) && Boolean(result.sidebar?.visible) && railPass && headerPass && bubblePass &&
       !result.documentOverflow.x;
+    const compatibilityPass = result.compatibility.pass;
     const expectedThemeId = ${JSON.stringify(expectedThemeId)};
     const expectedRevision = ${JSON.stringify(expectedRevision)};
     const payloadPass = (!expectedThemeId || result.themeId === expectedThemeId) &&
@@ -960,7 +981,7 @@ async function verifySession(session, expectedThemeId = null, expectedRevision =
         result.suggestionLabelColorsMatch
       ))
     );
-    result.pass = Boolean(basePass && homePass && payloadPass);
+    result.pass = Boolean(basePass && homePass && payloadPass && compatibilityPass);
     result.expectedThemeId = expectedThemeId;
     result.expectedRevision = expectedRevision;
     result.softNotes = {
@@ -1199,7 +1220,7 @@ function watchPayloadSources(themeDir, onDirty) {
       watcher = watchFs(directory, { persistent: false }, (_event, filename) => {
         const name = filename ? String(filename) : "";
         const staticChanged = directory === assetsRoot &&
-          (!name || name === "weixin-skin.css" || name === "renderer-inject.js");
+          (!name || name === "weixin-skin.css" || name === "renderer-inject.js" || name === "route-state.mjs");
         if (kind === "static" && !staticChanged) return;
         onDirty({ staticChanged });
       });

@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "pages": [
+    { "id": "conversation", "file": "conversation.html", "viewport": { "width": 1280, "height": 800 }, "expectedActive": ["shell", "conversation"] },
+    { "id": "search", "file": "search.html", "viewport": { "width": 1280, "height": 800 }, "expectedActive": ["shell", "conversation", "search"] },
+    { "id": "settings", "file": "settings.html", "viewport": { "width": 1280, "height": 800 }, "expectedActive": ["shell", "settings"] },
+    { "id": "sites", "file": "sites.html", "viewport": { "width": 1280, "height": 800 }, "expectedActive": ["shell", "sites"] },
+    { "id": "scheduled", "file": "scheduled.html", "viewport": { "width": 1280, "height": 800 }, "expectedActive": ["shell", "scheduled"] },
+    { "id": "plugins", "file": "plugins.html", "viewport": { "width": 1280, "height": 800 }, "expectedActive": ["shell", "plugins"] },
+    { "id": "pinned-summary", "file": "pinned-summary.html", "viewport": { "width": 1280, "height": 800 }, "expectedActive": ["shell", "conversation", "pinned-summary"] }
+  ]
+}

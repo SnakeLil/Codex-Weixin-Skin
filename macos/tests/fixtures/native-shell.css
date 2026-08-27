@@ -1,0 +1,28 @@
+* { box-sizing: border-box; }
+html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+body { display: flex; background: #fff; font: 14px -apple-system, BlinkMacSystemFont, sans-serif; }
+button, input { font: inherit; }
+aside.app-shell-left-panel { position: relative; flex: 0 0 320px; height: 100%; overflow: hidden; }
+aside.app-shell-left-panel > .max-w-full { height: 100%; padding: 64px 12px 12px; }
+aside.app-shell-left-panel nav { display: grid; gap: 6px; }
+aside.app-shell-left-panel nav a { min-height: 36px; padding: 8px 10px; }
+main.main-surface { position: relative; flex: 1 1 auto; min-width: 0; height: 100%; overflow: hidden; }
+main.main-surface > header.app-header-tint { position: fixed; z-index: 5; top: 0; height: 52px; padding: 16px 24px; }
+.app-shell-main-content-frame { position: absolute !important; inset: 52px 0 0; min-width: 0; overflow: hidden; }
+[role="main"], .utility-page { width: 100%; height: 100%; }
+.timeline { position: absolute; inset: 0 0 112px; overflow: auto; padding: 42px 64px; }
+.message-row { display: flex; margin: 20px 0; }
+.message-row.user { justify-content: flex-end; }
+[data-thread-scroll-footer="true"] { position: absolute; right: 0; bottom: 0; left: 0; height: 112px; }
+.composer-surface-chrome { width: 100%; height: 112px; }
+.global-command-menu-dialog { position: fixed; z-index: 20; top: 80px; left: 50%; transform: translateX(-50%); }
+.global-command-menu-dialog [cmdk-root] { width: 100%; }
+.global-command-menu-dialog [cmdk-list] { min-height: 160px; }
+.settings-shell { position: fixed; z-index: 30; inset: 0; display: flex; background: #fff; }
+.settings-nav { flex: 0 0 260px; padding: 72px 18px 24px; border-right: 1px solid #ddd; }
+.settings-nav input { width: 100%; height: 36px; }
+.weixin-skin-settings-content { flex: 1 1 auto; min-width: 0; padding: 72px 48px; overflow: auto; }
+.utility-page { padding: 48px 56px; }
+.utility-sticky.after\:bg-linear-to-b { height: 112px; }
+.thread-region { position: absolute; inset: 0; transform: translateX(-158px); }
+.summary-panel { position: absolute; z-index: 10; top: 24px; right: 0; bottom: 128px; width: 316px; padding: 18px; background: white; }

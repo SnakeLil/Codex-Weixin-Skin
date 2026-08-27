@@ -147,6 +147,15 @@ Optionally install [SwiftBar](https://swiftbar.app/) and double-click **Install 
 
 Verification checks the active theme ID, payload revision, page layout, and horizontal overflow, then captures the current interface.
 
+The project maintains sanitized DOM snapshots for seven UI states: conversation, search, settings, Sites, Scheduled Tasks, Plugins, and pinned summary. Every main push and pull request loads the real theme CSS in an isolated Chromium runtime to check key nodes, computed styles, horizontal overflow, and summary layout, then repacks the CodeDrobe Lite edition. Tests never launch, quit, or modify the Codex instance you are using. Contributors can run the same checks locally:
+
+```bash
+cd macos
+npm install
+npx playwright install chromium
+npm test
+```
+
 ## Restore / uninstall
 
 Double-click **Codex WeChat Skin - Restore.command**, or run:

@@ -147,6 +147,15 @@ cd Codex-Weixin-Skin/macos
 
 验证会检查当前主题 ID、注入版本、页面布局和横向溢出，并生成截图。
 
+项目还维护聊天、搜索、设置、站点、已安排任务、插件和置顶摘要七个脱敏 DOM 页面快照。每个 main 提交和 Pull Request 都会在独立 Chromium 中加载真实主题 CSS，检查关键节点、计算样式、横向溢出和摘要布局，并重新打包检查 CodeDrobe Lite 版本。测试不会启动、退出或修改正在使用的 Codex。开发者可以在本地运行：
+
+```bash
+cd macos
+npm install
+npx playwright install chromium
+npm test
+```
+
 ## 还原与卸载
 
 双击桌面的 **Codex WeChat Skin - Restore.command**，或运行：
