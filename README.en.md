@@ -48,6 +48,8 @@ English · [简体中文](./README.md)
 
 Choose Lite for a quick, low-friction preview. The full edition in this repository continues to provide the WeChat-style three-column shell, real user avatars, unread dots, light/dark presets, and custom wallpaper support. Its store-edition source lives in [`integrations/codedrobe/codex-wechat-skin-lite`](./integrations/codedrobe/codex-wechat-skin-lite).
 
+The Full and Lite editions inherit their WeChat colours, bubbles, radii, and base spacing from the same [`macos/design/wechat-tokens.json`](./macos/design/wechat-tokens.json) source. Automated checks prevent the generated design variables from drifting apart.
+
 ## Requirements
 
 - macOS

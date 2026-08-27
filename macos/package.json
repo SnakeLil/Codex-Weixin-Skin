@@ -5,10 +5,13 @@
   "type": "module",
   "scripts": {
     "doctor": "./scripts/doctor-macos.sh",
+    "generate:tokens": "node scripts/generate-design-tokens.mjs",
+    "check:tokens": "node scripts/generate-design-tokens.mjs --check",
     "check:source": "./scripts/check-source-macos.sh",
     "test:compatibility": "node --test tests/compatibility-contract.test.mjs",
     "test:diagnostics": "node --test tests/diagnostics.test.mjs",
-    "test": "npm run check:source && npm run test:diagnostics && npm run test:compatibility"
+    "test:tokens": "node --test tests/design-tokens.test.mjs",
+    "test": "npm run check:source && npm run check:tokens && npm run test:tokens && npm run test:diagnostics && npm run test:compatibility"
   },
   "engines": {
     "node": ">=20"

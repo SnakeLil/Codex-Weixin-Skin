@@ -10,30 +10,40 @@
 :root.codedrobe-host-codex {
   color-scheme: light !important;
 
+  /* weixin-shared-tokens:light:start — generated; run npm run generate:tokens */
   --wx-green: #07c160;
   --wx-lime: #95ec69;
   --wx-cyan: #10aeff;
-  --wx-red: #fa5151;
-  --wx-green-rgb: 7 193 96;
-
+  --wx-purple: #fa5151;
+  --wx-accent-rgb: 7 193 96;
+  --wx-accent-alt-rgb: 149 236 105;
+  --wx-secondary-rgb: 16 174 255;
+  --wx-highlight-rgb: 250 81 81;
   --wxs-bg: #ededed;
   --wxs-panel: #ffffff;
   --wxs-panel-2: #f7f7f7;
   --wxs-header: #f5f5f5;
   --wxs-composer: #f7f7f7;
-  --wxs-selected: #dedede;
+  --wxs-navrail: #e6e6e6;
+  --wxs-sel: #dedede;
   --wxs-hover: #e9e9e9;
   --wxs-text: #191919;
   --wxs-subtext: #5e5e5e;
-  --wxs-muted: #8f8f8f;
+  --wxs-muted: #9a9a9a;
   --wxs-line: rgba(0, 0, 0, .07);
   --wxs-line-strong: rgba(0, 0, 0, .12);
-  --wxs-received: #ffffff;
-  --wxs-received-text: #191919;
+  --wxs-recv: #ffffff;
+  --wxs-recv-text: #191919;
   --wxs-sent: #95ec69;
   --wxs-sent-text: #0b160a;
-  --wxs-radius: 4px;
   --wxs-shadow: 0 1px 1px rgba(0, 0, 0, .025);
+  --wxs-art-scrim: rgba(237, 237, 237, 0);
+  --wxs-radius: 4px;
+  --wxs-control-height: 34px;
+  --wxs-control-radius: 4px;
+  --wxs-list-padding-x: 10px;
+  --wxs-motion-fast: .14s;
+  /* weixin-shared-tokens:light:end */
   --wxs-sidebar-width: 292px;
 
   --color-token-bg-primary: var(--wxs-bg) !important;
@@ -47,10 +57,10 @@
   --color-token-input-background: var(--wxs-panel) !important;
   --color-token-input-border: var(--wxs-line-strong) !important;
   --color-token-list-hover-background: var(--wxs-hover) !important;
-  --color-token-list-active-selection-background: var(--wxs-selected) !important;
+  --color-token-list-active-selection-background: var(--wxs-sel) !important;
   --color-token-link: var(--wx-cyan) !important;
   --color-token-primary: var(--wx-green) !important;
-  --color-token-focus-border: rgb(var(--wx-green-rgb) / .62) !important;
+  --color-token-focus-border: rgb(var(--wx-accent-rgb) / .62) !important;
 }
 
 html.codedrobe-host-codex body {
@@ -72,6 +82,7 @@ html.codedrobe-host-codex body::before {
 
 /* App shell and the native Codex sidebar become a WeChat session list. */
 html.codedrobe-host-codex aside.app-shell-left-panel {
+  flex: 0 0 var(--wxs-sidebar-width) !important;
   width: var(--wxs-sidebar-width) !important;
   min-width: var(--wxs-sidebar-width) !important;
   background: var(--wxs-panel-2) !important;
@@ -91,15 +102,15 @@ html.codedrobe-host-codex aside.app-shell-left-panel nav {
 }
 
 html.codedrobe-host-codex aside.app-shell-left-panel nav {
-  --padding-row-x: 10px !important;
-  --padding-row-cell-x: 10px !important;
-  --radius-token-row: 4px !important;
+  --padding-row-x: var(--wxs-list-padding-x) !important;
+  --padding-row-cell-x: var(--wxs-list-padding-x) !important;
+  --radius-token-row: var(--wxs-control-radius) !important;
 }
 
 html.codedrobe-host-codex aside.app-shell-left-panel :is(button, a) {
   color: var(--wxs-text) !important;
   border-radius: 5px !important;
-  transition: background-color .14s ease, color .14s ease !important;
+  transition: background-color var(--wxs-motion-fast) ease, color var(--wxs-motion-fast) ease !important;
 }
 
 html.codedrobe-host-codex aside.app-shell-left-panel :is(button, a):hover {
@@ -117,10 +128,10 @@ html.codedrobe-host-codex aside.app-shell-left-panel
   flex: 0 0 36px !important;
   width: 36px !important;
   min-width: 36px !important;
-  height: 34px !important;
+  height: var(--wxs-control-height) !important;
   margin-right: 8px !important;
   padding: 0 !important;
-  border-radius: 4px !important;
+  border-radius: var(--wxs-control-radius) !important;
   background: var(--wx-green) !important;
 }
 
@@ -150,7 +161,7 @@ html.codedrobe-host-codex aside.app-shell-left-panel :is(
   [class~="bg-token-list-hover-background"],
   [aria-current="page"]
 ) {
-  background: var(--wxs-selected) !important;
+  background: var(--wxs-sel) !important;
   border: 0 !important;
   border-radius: 0 !important;
   box-shadow: none !important;
@@ -178,9 +189,9 @@ html.codedrobe-host-codex aside.app-shell-left-panel :is(
   display: flex !important;
   flex: 1 1 auto !important;
   justify-content: flex-start !important;
-  height: 34px !important;
-  padding: 0 10px !important;
-  border-radius: 4px !important;
+  height: var(--wxs-control-height) !important;
+  padding: 0 var(--wxs-list-padding-x) !important;
+  border-radius: var(--wxs-control-radius) !important;
   background: var(--wxs-hover) !important;
   color: var(--wxs-muted) !important;
 }
@@ -205,10 +216,10 @@ html.codedrobe-host-codex aside.app-shell-left-panel :is(
   flex: 0 0 36px !important;
   width: 36px !important;
   min-width: 36px !important;
-  height: 34px !important;
+  height: var(--wxs-control-height) !important;
   margin-left: 8px !important;
   padding: 0 !important;
-  border-radius: 4px !important;
+  border-radius: var(--wxs-control-radius) !important;
   background: var(--wxs-hover) !important;
 }
 
@@ -336,8 +347,8 @@ html.codedrobe-host-codex [data-content-search-unit-key$=":assistant"] {
   padding: 9px 12px !important;
   border: 1px solid rgba(0, 0, 0, .025) !important;
   border-radius: var(--wxs-radius) !important;
-  background: var(--wxs-received) !important;
-  color: var(--wxs-received-text) !important;
+  background: var(--wxs-recv) !important;
+  color: var(--wxs-recv-text) !important;
   line-height: 1.55 !important;
   box-shadow: var(--wxs-shadow) !important;
 }
@@ -351,7 +362,7 @@ html.codedrobe-host-codex [data-content-search-unit-key$=":assistant"]::after {
   width: 10px;
   height: 10px;
   border-radius: 1px;
-  background: var(--wxs-received);
+  background: var(--wxs-recv);
   transform: rotate(45deg);
 }
 
@@ -384,8 +395,8 @@ html.codedrobe-host-codex [data-message-author-role] {
 
 html.codedrobe-host-codex [data-message-author-role="assistant"] {
   margin-right: auto !important;
-  background: var(--wxs-received) !important;
-  color: var(--wxs-received-text) !important;
+  background: var(--wxs-recv) !important;
+  color: var(--wxs-recv-text) !important;
 }
 
 html.codedrobe-host-codex [data-message-author-role="user"] {
@@ -457,7 +468,7 @@ html.codedrobe-host-codex .composer-surface-chrome button:not([class~="bg-token-
 
 html.codedrobe-host-codex .composer-surface-chrome button:not([class~="bg-token-foreground"]):hover {
   color: var(--wx-green) !important;
-  background: rgb(var(--wx-green-rgb) / .1) !important;
+  background: rgb(var(--wx-accent-rgb) / .1) !important;
 }
 
 html.codedrobe-host-codex button[class~="bg-token-foreground"] {
@@ -532,7 +543,7 @@ html.codedrobe-host-codex .group\/home-suggestions > * {
 
 html.codedrobe-host-codex .group\/home-suggestions > *:hover {
   transform: none !important;
-  border-color: rgb(var(--wx-green-rgb) / .38) !important;
+  border-color: rgb(var(--wx-accent-rgb) / .38) !important;
   background: var(--wxs-panel-2) !important;
 }
 
@@ -647,7 +658,7 @@ html.codedrobe-host-codex .global-command-menu-dialog [cmdk-item] {
 }
 
 html.codedrobe-host-codex .global-command-menu-dialog [cmdk-item][data-selected="true"] {
-  background: rgb(var(--wx-green-rgb) / .11) !important;
+  background: rgb(var(--wx-accent-rgb) / .11) !important;
 }
 
 html.codedrobe-host-codex .global-command-menu-dialog [cmdk-item][data-selected="true"] svg {
@@ -672,7 +683,7 @@ html.codedrobe-host-codex :is(pre, table, blockquote) {
 
 html.codedrobe-host-codex :is(button, [role="button"]):focus-visible,
 html.codedrobe-host-codex :is(a, input, textarea, [contenteditable="true"]):focus-visible {
-  outline: 2px solid rgb(var(--wx-green-rgb) / .68) !important;
+  outline: 2px solid rgb(var(--wx-accent-rgb) / .68) !important;
   outline-offset: 2px !important;
 }
 

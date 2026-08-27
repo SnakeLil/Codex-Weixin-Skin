@@ -48,6 +48,8 @@
 
 Lite 版适合快速体验；本仓库的完整版继续提供微信式三栏布局、真实用户头像、未读红点、深浅色预设和自定义背景等增强能力。商店版源码位于 [`integrations/codedrobe/codex-wechat-skin-lite`](./integrations/codedrobe/codex-wechat-skin-lite)。
 
+完整版与 Lite 版的微信颜色、气泡、圆角和基础间距来自同一份 [`macos/design/wechat-tokens.json`](./macos/design/wechat-tokens.json)，并由自动测试阻止两版设计变量意外漂移。
+
 ## 环境要求
 
 - macOS

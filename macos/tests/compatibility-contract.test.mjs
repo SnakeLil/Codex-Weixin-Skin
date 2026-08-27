@@ -17,13 +17,18 @@ const fixtureRoot = path.join(here, "fixtures");
 const manifest = JSON.parse(await fs.readFile(path.join(fixtureRoot, "compatibility-pages.json"), "utf8"));
 const nativeCss = await fs.readFile(path.join(fixtureRoot, "native-shell.css"), "utf8");
 const themeCss = await fs.readFile(path.join(here, "..", "assets", "weixin-skin.css"), "utf8");
+const liteCss = await fs.readFile(
+  path.join(here, "..", "..", "integrations", "codedrobe", "codex-wechat-skin-lite", "codex.css"),
+  "utf8",
+);
 const systemChrome = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
 let browser;
 
-const htmlWithStyles = (html) => html.replace(
+const htmlWithCss = (html, css) => html.replace(
   "</head>",
-  `<style data-fixture-native>${nativeCss}</style><style id="codex-weixin-skin-style">${themeCss}</style></head>`,
+  `<style data-fixture-native>${nativeCss}</style><style id="codex-weixin-skin-style">${css}</style></head>`,
 );
+const htmlWithStyles = (html) => htmlWithCss(html, themeCss);
 
 before(async () => {
   const useSystemChrome = process.env.WEIXIN_SKIN_TEST_BROWSER === "system" &&
@@ -196,4 +201,47 @@ test("invalid selectors are reported instead of crashing live verification", () 
   ], () => { throw new Error("Invalid selector"); });
   assert.equal(result.pass, false);
   assert.equal(result.selectorErrors.length, 1);
+});
+
+test("CodeDrobe Lite consumes the shared WeChat tokens in a rendered conversation", async () => {
+  const fixture = manifest.pages.find((page) => page.id === "conversation");
+  const page = await browser.newPage({ viewport: fixture.viewport });
+  try {
+    const nativeHtml = await fs.readFile(path.join(fixtureRoot, fixture.file), "utf8");
+    const liteHtml = nativeHtml.replace(
+      'class="codex-weixin-skin" data-weixin-shell="light"',
+      'class="codedrobe-host-codex"',
+    );
+    await page.setContent(htmlWithCss(liteHtml, liteCss));
+    const result = await page.evaluate(() => {
+      const root = getComputedStyle(document.documentElement);
+      const sent = getComputedStyle(document.querySelector("[data-user-message-bubble='true']"));
+      const received = getComputedStyle(document.querySelector("[data-content-search-unit-key$=':assistant']"));
+      const sidebar = document.querySelector("aside.app-shell-left-panel").getBoundingClientRect();
+      return {
+        tokens: {
+          green: root.getPropertyValue("--wx-green").trim(),
+          background: root.getPropertyValue("--wxs-bg").trim(),
+          radius: root.getPropertyValue("--wxs-radius").trim(),
+          controlHeight: root.getPropertyValue("--wxs-control-height").trim(),
+        },
+        sent: { background: sent.backgroundColor, radius: sent.borderRadius },
+        received: { background: received.backgroundColor, radius: received.borderRadius },
+        sidebarWidth: sidebar.width,
+        overflowX: document.documentElement.scrollWidth > document.documentElement.clientWidth,
+      };
+    });
+    assert.deepEqual(result.tokens, {
+      green: "#07c160",
+      background: "#ededed",
+      radius: "4px",
+      controlHeight: "34px",
+    });
+    assert.deepEqual(result.sent, { background: "rgb(149, 236, 105)", radius: "4px" });
+    assert.deepEqual(result.received, { background: "rgb(255, 255, 255)", radius: "4px" });
+    assert.equal(result.sidebarWidth, 292);
+    assert.equal(result.overflowX, false);
+  } finally {
+    await page.close();
+  }
 });

@@ -36,13 +36,14 @@ It injects through **local‑loopback CDP**. It does **not** modify the official
 
 | Path | Purpose |
 | --- | --- |
-| `assets/weixin-skin.css` | The WeChat stylesheet (flat panels, green/white bubbles, light/dark tokens) |
+| `assets/weixin-skin.css` | The generated-token consumer for the Full WeChat stylesheet |
 | `assets/renderer-inject.js` | Self‑contained payload injected into the renderer |
 | `assets/theme.json` | Default theme tokens (WeChat green palette) |
 | `assets/portal-hero.png` | Default flat chat background |
 | `scripts/injector.mjs` | CDP engine: build payload, inject, verify, remove |
 | `scripts/common-macos.sh` | Shared paths, Codex discovery, launchd, safety checks |
 | `scripts/export-diagnostics-macos.sh` · `scripts/diagnostics.mjs` | Privacy-safe, read-only diagnostic ZIP export |
+| `design/wechat-tokens.json` · `scripts/generate-design-tokens.mjs` | Canonical Full/Lite colour, radius, and spacing tokens plus generator |
 | `scripts/*-weixin-skin-macos.sh` | install / start / restore / verify / status / pause |
 | `scripts/switch-theme-macos.sh` · `customize-theme-macos.sh` · `load-image-theme-macos.sh` | theme library + wallpaper import |
 | `presets/preset-wechat-*` | 微信 · 浅色 / 深色 |
@@ -51,6 +52,8 @@ It injects through **local‑loopback CDP**. It does **not** modify the official
 ## Design tokens
 
 Accent (WeChat green) `#07C160` · sent bubble `#95EC69` (light) / `#3EB575` (dark) · panels `#FFFFFF` / `#2C2C2C` · chat backdrop `#EDEDED` / `#191919`. The injector rewrites the accent tokens from `theme.json`; neutral surfaces and bubble colours are owned by `weixin-skin.css` and keyed on `data-weixin-shell` so light/dark render independently.
+
+Edit `design/wechat-tokens.json`, then run `npm run generate:tokens`. Commit the generated Full CSS, Lite CSS, and Lite base-palette manifest. `npm run check:tokens` and the regression suite fail if either edition no longer matches the canonical source.
 
 ## Restore
 
