@@ -1,0 +1,58 @@
+name: Release macOS installer
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: macos-14
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: macos/package-lock.json
+      - name: Validate release version
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          test "$version" = "$(tr -d '[:space:]' < macos/VERSION)"
+      - name: Install isolated test runtime
+        working-directory: macos
+        run: |
+          npm ci --omit=optional --ignore-scripts --no-audit
+          npx playwright install chromium
+      - name: Run regression suite
+        working-directory: macos
+        run: npm test
+      - name: Build one-click DMG
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          ./macos/scripts/build-installer-dmg-macos.sh \
+            --output "$RUNNER_TEMP/Codex-Weixin-Skin-v${version}.dmg"
+          hdiutil verify "$RUNNER_TEMP/Codex-Weixin-Skin-v${version}.dmg"
+      - name: Build legacy ZIP and checksums
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          stage="$RUNNER_TEMP/Codex-Weixin-Skin-v${version}"
+          mkdir -p "$stage"
+          rsync -a --exclude node_modules --exclude release --exclude .DS_Store macos/ "$stage/macos/"
+          cp README.md README.en.md LICENSE "$stage/"
+          ditto --norsrc -c -k --keepParent "$stage" "$RUNNER_TEMP/Codex-Weixin-Skin-v${version}.zip"
+          cd "$RUNNER_TEMP"
+          shasum -a 256 "Codex-Weixin-Skin-v${version}.dmg" "Codex-Weixin-Skin-v${version}.zip" \
+            > "Codex-Weixin-Skin-v${version}-SHA256.txt"
+      - name: Publish GitHub Release assets
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          files: |
+            ${{ runner.temp }}/Codex-Weixin-Skin-v*.dmg
+            ${{ runner.temp }}/Codex-Weixin-Skin-v*.zip
+            ${{ runner.temp }}/Codex-Weixin-Skin-v*-SHA256.txt

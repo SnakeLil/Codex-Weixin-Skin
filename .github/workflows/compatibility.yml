@@ -29,6 +29,11 @@ jobs:
       - name: Check source and compatibility contracts
         working-directory: macos
         run: npm test
+      - name: Build and verify the one-click installer DMG
+        run: |
+          ./macos/scripts/build-installer-dmg-macos.sh \
+            --output "$RUNNER_TEMP/Codex-Weixin-Skin.dmg"
+          hdiutil verify "$RUNNER_TEMP/Codex-Weixin-Skin.dmg"
       - name: Pack the CodeDrobe Lite edition
         run: >-
           npx -y @codedrobe/core@0.6.1 theme pack

@@ -1,5 +1,5 @@
 import fs from "node:fs/promises";
-import { constants as fsConstants, watch as watchFs } from "node:fs";
+import { constants as fsConstants, realpathSync, watch as watchFs } from "node:fs";
 import { execFile } from "node:child_process";
 import { createHash } from "node:crypto";
 import path from "node:path";
@@ -1890,7 +1890,13 @@ async function runOneShotAndExit(options) {
   process.exit(process.exitCode ?? 0);
 }
 
-if (path.resolve(process.argv[1] || "") === path.resolve(scriptPath)) {
+let directExecution = false;
+try {
+  directExecution = realpathSync(process.argv[1] || "") === realpathSync(scriptPath);
+} catch {
+  directExecution = path.resolve(process.argv[1] || "") === path.resolve(scriptPath);
+}
+if (directExecution) {
   try {
     const options = parseArgs(process.argv.slice(2));
     if (options.mode === "check") {

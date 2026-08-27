@@ -33,34 +33,46 @@ PORT_EXPLICIT="false"
 RESTART_EXISTING="false"
 PROMPT_RESTART="false"
 FOREGROUND_INJECTOR="false"
+REFUSE_RUNNING="false"
 while [ "$#" -gt 0 ]; do
   case "$1" in
     --port) PORT="${2:-}"; PORT_EXPLICIT="true"; shift 2 ;;
     --restart-existing) RESTART_EXISTING="true"; shift ;;
     --prompt-restart) PROMPT_RESTART="true"; shift ;;
     --foreground-injector) FOREGROUND_INJECTOR="true"; shift ;;
+    --refuse-running) REFUSE_RUNNING="true"; shift ;;
     *) fail "Unknown start argument: $1" ;;
   esac
 done
 case "$PORT" in ''|*[!0-9]*) fail "Invalid port: $PORT" ;; esac
 [ "$PORT" -ge 1024 ] && [ "$PORT" -le 65535 ] || fail "Port must be between 1024 and 65535."
+[ "$REFUSE_RUNNING" = "false" ] || { [ "$RESTART_EXISTING" = "false" ] && [ "$PROMPT_RESTART" = "false" ]; } \
+  || fail "--refuse-running cannot be combined with restart options."
 
+discover_codex_app
+require_signed_node_runtime
+
+refuse_running_codex() {
+  [ "$REFUSE_RUNNING" = "false" ] || ! codex_is_running
+}
+
+refuse_running_codex || fail "Codex is already running. The graphical installer will not connect, inject, or restart it."
 ensure_state_root
-if [ "$FOREGROUND_INJECTOR" != "true" ]; then
+if [ "$FOREGROUND_INJECTOR" != "true" ] && [ "$REFUSE_RUNNING" = "false" ]; then
   OPERATION_TOKEN="$(new_operation_token)"
   write_operation_state applying "正在应用皮肤" "$OPERATION_TOKEN" \
     || fail "Could not publish the apply operation state."
 fi
-discover_codex_app
-require_signed_node_runtime
 
 if [ "$PORT_EXPLICIT" = "false" ] && [ -f "$STATE_PATH" ]; then
   saved_port="$(state_field port)" || fail "Could not read the existing state port."
   [ -n "$saved_port" ] && PORT="$saved_port"
 fi
 
+refuse_running_codex || fail "Codex opened while the graphical installer was preparing. It was not injected or restarted."
 DEBUG_READY="false"
 if verified_cdp_endpoint "$PORT"; then DEBUG_READY="true"; fi
+refuse_running_codex || fail "Codex opened while the graphical installer was preparing. It was not injected or restarted."
 
 if [ "$DEBUG_READY" = "true" ] && [ -n "$OPERATION_TOKEN" ]; then
   begin_client_operation "$PORT" apply 3000 "$OPERATION_TOKEN" >/dev/null 2>&1 || true
@@ -73,6 +85,8 @@ if [ "$DEBUG_READY" = "false" ]; then
 else
   verify_macos_app_signature quick
 fi
+
+refuse_running_codex || fail "Codex opened while the graphical installer was verifying the app. It was not injected or restarted."
 
 if codex_is_running && [ "$DEBUG_READY" = "false" ]; then
   if [ "$PROMPT_RESTART" = "true" ] && [ "$RESTART_EXISTING" = "false" ]; then
@@ -90,6 +104,7 @@ if codex_is_running && [ "$DEBUG_READY" = "false" ]; then
   stop_codex true
 fi
 
+refuse_running_codex || fail "Codex opened before graphical installation completed. It was not injected or restarted."
 if [ -f "$STATE_PATH" ]; then
   stop_recorded_injector
 fi
@@ -98,7 +113,9 @@ INJECTOR_PID=""
 if [ "$DEBUG_READY" = "false" ]; then
   PORT="$(select_available_port "$PORT")"
   printf 'Launching ChatGPT with skin debug port %s…\n' "$PORT" >&2
-  launch_codex_with_cdp "$PORT"
+  if ! launch_codex_with_cdp "$PORT" "$REFUSE_RUNNING"; then
+    fail "Codex opened before the graphical installer could launch it. It was not injected or restarted."
+  fi
   # Start probing immediately instead of waiting for the native window to finish loading.
   if [ "$FOREGROUND_INJECTOR" != "true" ]; then
     INJECTOR_PID="$(launch_injector_daemon "$PORT")"

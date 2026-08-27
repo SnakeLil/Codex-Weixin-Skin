@@ -819,6 +819,10 @@ release_codex_launchd_job() {
 
 launch_codex_with_cdp() {
   local port="$1"
+  local refuse_running="${2:-false}"
+  if [ "$refuse_running" = "true" ] && codex_is_running; then
+    return 2
+  fi
   : > "$APP_LOG"
   : > "$APP_ERROR_LOG"
   release_codex_launchd_job
@@ -835,6 +839,7 @@ launch_codex_with_cdp() {
       --remote-debugging-port="$port" \
       >>"$APP_LOG" 2>>"$APP_ERROR_LOG" &
   fi
+  return 0
 }
 
 launch_codex_normally() {

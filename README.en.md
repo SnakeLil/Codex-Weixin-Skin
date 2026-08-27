@@ -8,7 +8,7 @@ Bring a desktop-WeChat-inspired experience to the official Codex app for macOS: 
 
 English · [简体中文](./README.md)
 
-[**Download the latest release**](https://github.com/SnakeLil/Codex-Weixin-Skin/releases/latest/download/Codex-Weixin-Skin-v1.0.0.zip) · [CodeDrobe Lite store edition](https://codedrobe.app/en/themes/codex-wechat-skin-lite) · [Install guide](#graphical-install-recommended) · [Report an issue](https://github.com/SnakeLil/Codex-Weixin-Skin/issues/new/choose)
+[**Download the latest release**](https://github.com/SnakeLil/Codex-Weixin-Skin/releases/latest) · [CodeDrobe Lite store edition](https://codedrobe.app/en/themes/codex-wechat-skin-lite) · [Install guide](#graphical-install-recommended) · [Report an issue](https://github.com/SnakeLil/Codex-Weixin-Skin/issues/new/choose)
 
 ![Codex WeChat Skin feature demo](./docs/demo/codex-weixin-skin-demo.gif)
 
@@ -75,16 +75,20 @@ Only macOS is supported at this time. A Codex UI update may require correspondin
 
 ### Graphical install (recommended)
 
-1. Download `Codex-Weixin-Skin-v1.0.0.zip` from the latest [Release](https://github.com/SnakeLil/Codex-Weixin-Skin/releases/latest) and extract it. Developers can also clone the repository:
+New releases prioritize `Codex-Weixin-Skin-vX.Y.Z.dmg`. Open the DMG, double-click **Install Codex WeChat Skin.app**, and follow the graphical installer. It never force-quits Codex, so save your work and quit Codex yourself first.
 
-   ```bash
-   git clone https://github.com/SnakeLil/Codex-Weixin-Skin.git
-   ```
+> Community DMGs from GitHub Releases are ad-hoc signed and not Apple-notarized. Gatekeeper may block the first launch; right-click the installer and choose **Open**, or use **System Settings → Privacy & Security → Open Anyway**. This does not mean theme installation failed.
 
-2. Launch Codex once, then **fully quit Codex**.
-3. Open the repository's `macos` folder.
-4. Right-click **Install Codex Weixin Skin.command** and choose **Open**.
-5. The installer copies the theme to a stable location, creates Desktop launchers, and starts Codex with the theme.
+If the current [Release](https://github.com/SnakeLil/Codex-Weixin-Skin/releases/latest) only provides a ZIP, download and extract `Codex-Weixin-Skin-v1.0.0.zip`. Developers can also clone the repository:
+
+```bash
+git clone https://github.com/SnakeLil/Codex-Weixin-Skin.git
+```
+
+1. Launch Codex once, save your work, then **fully quit Codex**.
+2. Use the installer app from the DMG. ZIP / Git users should open the repository's `macos` folder.
+3. ZIP / Git users can right-click **Install Codex Weixin Skin.command** and choose **Open**.
+4. The installer copies the theme to a stable location, creates Desktop launchers, and starts Codex with the theme.
 
 If macOS blocks the launcher, use **System Settings → Privacy & Security → Open Anyway**, or right-click the file and choose **Open** again.
 

@@ -8,7 +8,7 @@
 
 [English](./README.en.md) · 简体中文
 
-[**下载最新版本**](https://github.com/SnakeLil/Codex-Weixin-Skin/releases/latest/download/Codex-Weixin-Skin-v1.0.0.zip) · [CodeDrobe Lite 商店版](https://codedrobe.app/zh/themes/codex-wechat-skin-lite) · [安装教程](#图形化安装推荐) · [反馈问题](https://github.com/SnakeLil/Codex-Weixin-Skin/issues/new/choose)
+[**下载最新版本**](https://github.com/SnakeLil/Codex-Weixin-Skin/releases/latest) · [CodeDrobe Lite 商店版](https://codedrobe.app/zh/themes/codex-wechat-skin-lite) · [安装教程](#图形化安装推荐) · [反馈问题](https://github.com/SnakeLil/Codex-Weixin-Skin/issues/new/choose)
 
 ![Codex 微信主题功能演示](./docs/demo/codex-weixin-skin-demo.gif)
 
@@ -75,16 +75,20 @@ Lite 版适合快速体验；本仓库的完整版继续提供微信式三栏布
 
 ### 图形化安装（推荐）
 
-1. 从 [Releases](https://github.com/SnakeLil/Codex-Weixin-Skin/releases/latest) 下载 `Codex-Weixin-Skin-v1.0.0.zip` 并解压。开发者也可以使用 Git 克隆：
+新版本优先提供 `Codex-Weixin-Skin-vX.Y.Z.dmg`：打开 DMG，双击 **Install Codex WeChat Skin.app**，按界面提示即可完成安装并启动主题。安装器不会强制退出 Codex；请先保存工作并自行退出 Codex。
 
-   ```bash
-   git clone https://github.com/SnakeLil/Codex-Weixin-Skin.git
-   ```
+> GitHub Release 的社区 DMG 采用 ad-hoc 签名，尚未经过 Apple 公证。首次打开可能被 Gatekeeper 拦截；请右键安装器选择“打开”，或前往“系统设置 → 隐私与安全性 → 仍要打开”。这不是主题安装失败。
 
-2. 先正常启动一次 Codex，然后**完全退出 Codex**。
-3. 打开项目的 `macos` 文件夹。
-4. 右键点击 **Install Codex Weixin Skin.command**，选择“打开”。
-5. 安装程序会把主题复制到稳定目录，创建桌面快捷启动器，并启动带微信主题的 Codex。
+如果当前 Release 只提供 ZIP，也可以下载 `Codex-Weixin-Skin-v1.0.0.zip` 并解压。开发者还可以使用 Git 克隆：
+
+```bash
+git clone https://github.com/SnakeLil/Codex-Weixin-Skin.git
+```
+
+1. 先正常启动一次 Codex，然后保存工作并**完全退出 Codex**。
+2. 使用 DMG 中的安装器 App；ZIP / Git 用户则打开项目的 `macos` 文件夹。
+3. ZIP / Git 用户右键点击 **Install Codex Weixin Skin.command**，选择“打开”。
+4. 安装程序会把主题复制到稳定目录，创建桌面快捷启动器，并启动带微信主题的 Codex。
 
 首次打开若被 macOS 拦截，请在“系统设置 → 隐私与安全性”中选择“仍要打开”，或再次右键选择“打开”。
 

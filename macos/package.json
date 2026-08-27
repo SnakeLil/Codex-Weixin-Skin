@@ -10,8 +10,9 @@
     "check:source": "./scripts/check-source-macos.sh",
     "test:compatibility": "node --test tests/compatibility-contract.test.mjs",
     "test:diagnostics": "node --test tests/diagnostics.test.mjs",
+    "test:installer": "node --test tests/installer-package.test.mjs",
     "test:tokens": "node --test tests/design-tokens.test.mjs",
-    "test": "npm run check:source && npm run check:tokens && npm run test:tokens && npm run test:diagnostics && npm run test:compatibility"
+    "test": "npm run check:source && npm run check:tokens && npm run test:tokens && npm run test:diagnostics && npm run test:installer && npm run test:compatibility"
   },
   "engines": {
     "node": ">=20"

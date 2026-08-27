@@ -14,6 +14,10 @@ It injects through **local‑loopback CDP**. It does **not** modify the official
 
 ## Quick start
 
+Release users can open the DMG and double-click **Install Codex WeChat Skin.app** for the native graphical flow. The app refuses to continue while Codex is running and never terminates it on the user's behalf.
+
+Community DMGs are ad-hoc signed and not Apple-notarized, so Gatekeeper may require **Privacy & Security → Open Anyway** on first launch. Maintainers with a Developer ID certificate can set `WEIXIN_INSTALLER_SIGN_IDENTITY` while building; the builder then enables hardened runtime and a secure timestamp. Apple notarization remains a separate release-owner step.
+
 ```bash
 # Install to the stable path + create Desktop launchers (no auto‑launch)
 ./scripts/install-weixin-skin-macos.sh --no-launch
@@ -44,6 +48,7 @@ It injects through **local‑loopback CDP**. It does **not** modify the official
 | `scripts/common-macos.sh` | Shared paths, Codex discovery, launchd, safety checks |
 | `scripts/export-diagnostics-macos.sh` · `scripts/diagnostics.mjs` | Privacy-safe, read-only diagnostic ZIP export |
 | `design/wechat-tokens.json` · `scripts/generate-design-tokens.mjs` | Canonical Full/Lite colour, radius, and spacing tokens plus generator |
+| `installer-app/` · `scripts/build-installer-dmg-macos.sh` | Native universal installer app and reproducible DMG builder |
 | `scripts/*-weixin-skin-macos.sh` | install / start / restore / verify / status / pause |
 | `scripts/switch-theme-macos.sh` · `customize-theme-macos.sh` · `load-image-theme-macos.sh` | theme library + wallpaper import |
 | `presets/preset-wechat-*` | 微信 · 浅色 / 深色 |
