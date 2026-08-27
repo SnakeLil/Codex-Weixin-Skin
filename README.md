@@ -94,6 +94,7 @@ Lite 版适合快速体验；本仓库的完整版继续提供微信式三栏布
 | --- | --- |
 | **Codex WeChat Skin.command** | 启动或重新应用微信主题 |
 | **Codex WeChat Skin - Customize.command** | 切换预设、修改颜色或载入聊天背景 |
+| **Codex WeChat Skin - Diagnostics.command** | 导出不含聊天内容和账号信息的匿名诊断包 |
 | **Codex WeChat Skin - Verify.command** | 验证主题并生成当前界面截图 |
 | **Codex WeChat Skin - Restore.command** | 移除主题并恢复官方外观 |
 
@@ -154,6 +155,16 @@ cd macos
 npm install
 npx playwright install chromium
 npm test
+```
+
+### 导出匿名诊断包
+
+遇到安装、启动或兼容性问题时，双击桌面的 **Codex WeChat Skin - Diagnostics.command**，即可在桌面生成一个 ZIP 并自动在 Finder 中定位。诊断包只包含系统/Codex/主题版本、主题运行状态、载荷完整性和兼容性覆盖信息；不会收集聊天内容、截图、原始日志、账号数据、自定义主题名称或本地路径，也不会连接正在使用的 Codex 调试端口。可以将该 ZIP 直接附到 [Bug Issue](https://github.com/SnakeLil/Codex-Weixin-Skin/issues/new/choose)。
+
+命令行也可以安全导出：
+
+```bash
+~/.codex/codex-weixin-skin-studio/scripts/export-diagnostics-macos.sh
 ```
 
 ## 还原与卸载

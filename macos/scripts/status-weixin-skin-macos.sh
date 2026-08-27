@@ -8,10 +8,12 @@ set -u
 SHORT="false"
 JSON="false"
 DEEP="false"
+ANONYMOUS="false"
 while [ "$#" -gt 0 ]; do
   case "$1" in
     --short) SHORT="true"; shift ;;
     --json) JSON="true"; shift ;;
+    --anonymous-json) JSON="true"; ANONYMOUS="true"; shift ;;
     --deep) DEEP="true"; shift ;;
     *) printf 'Unknown status argument: %s\n' "$1" >&2; exit 1 ;;
   esac
@@ -100,7 +102,9 @@ if [ -f "$STATE_PATH" ]; then
   saved_start="$(read_json_text_field "$STATE_SNAPSHOT" injectorStartedAt)"
   saved_node="$(read_json_text_field "$STATE_SNAPSHOT" nodePath)"
   saved_injector="$(read_json_text_field "$STATE_SNAPSHOT" injectorPath)"
-  APPLIED_THEME_NAME="$(read_json_text_field "$STATE_SNAPSHOT" appliedThemeName)"
+  if [ "$ANONYMOUS" = "false" ]; then
+    APPLIED_THEME_NAME="$(read_json_text_field "$STATE_SNAPSHOT" appliedThemeName)"
+  fi
   if injector_identity_matches "${pid:-}" "$saved_start" "$saved_node" "$saved_injector" "$PORT"; then
     INJECTOR_ALIVE="true"
     case "${SESSION:-}" in
@@ -123,7 +127,7 @@ if [ -f "$STATE_PATH" ]; then
   fi
 fi
 
-if [ -f "$THEME_DIR/theme.json" ]; then
+if [ "$ANONYMOUS" = "false" ] && [ -f "$THEME_DIR/theme.json" ]; then
   THEME_SNAPSHOT="$(/bin/cat "$THEME_DIR/theme.json" 2>/dev/null)"
   THEME_NAME="$(read_json_text_field "$THEME_SNAPSHOT" name)"
   [ -n "$THEME_NAME" ] || THEME_NAME="$(read_json_text_field "$THEME_SNAPSHOT" id)"
@@ -133,7 +137,11 @@ fi
 if [ -f "$OPERATION_STATE_PATH" ]; then
   OPERATION_SNAPSHOT="$(/bin/cat "$OPERATION_STATE_PATH" 2>/dev/null)"
   operation_status="$(read_plist_snapshot_field "$OPERATION_SNAPSHOT" status)"
-  operation_message="$(read_plist_snapshot_field "$OPERATION_SNAPSHOT" message)"
+  if [ "$ANONYMOUS" = "false" ]; then
+    operation_message="$(read_plist_snapshot_field "$OPERATION_SNAPSHOT" message)"
+  else
+    operation_message=""
+  fi
   operation_updated_at="$(read_plist_snapshot_field "$OPERATION_SNAPSHOT" updatedAt)"
   now="$(/bin/date +%s)"
   case "$operation_updated_at" in ''|*[!0-9]*) operation_updated_at="0" ;; esac
@@ -197,6 +205,25 @@ if [ "$JSON" = "true" ]; then
   json_escape() { local s="$1"; s="${s//\\/\\\\}"; s="${s//\"/\\\"}"; printf '%s' "$s"; }
   bool() { [ "$1" = "true" ] && printf 'true' || printf 'false'; }
   case "$PORT" in ''|*[!0-9]*) port_json="\"$(json_escape "$PORT")\"" ;; *) port_json="$PORT" ;; esac
+  if [ "$ANONYMOUS" = "true" ]; then
+    case "$PORT" in
+      ''|*[!0-9]*) port_json="null" ;;
+      *)
+        normalized_port="$(LC_ALL=C /usr/bin/printf '%s' "$PORT" | /usr/bin/sed 's/^0*//')"
+        [ -n "$normalized_port" ] || normalized_port="0"
+        if [ "${#normalized_port}" -le 5 ] \
+          && [ "$normalized_port" -ge 1024 ] && [ "$normalized_port" -le 65535 ]; then
+          port_json="$normalized_port"
+        else
+          port_json="null"
+        fi
+        ;;
+    esac
+    printf '{"session":"%s","operation":"%s","port":%s,"injectorAlive":%s,"codexRunning":%s}\n' \
+      "$(json_escape "$SESSION")" "$(json_escape "$OPERATION_STATUS")" "$port_json" \
+      "$(bool "$INJECTOR_ALIVE")" "$(bool "$CODEX_RUNNING")"
+    exit 0
+  fi
   printf '{"session":"%s","operation":"%s","operationMessage":"%s","port":%s,"injectorAlive":%s,"cdpOk":%s,"codexRunning":%s,"themeName":"%s","appliedThemeName":"%s"}\n' \
     "$(json_escape "$SESSION")" "$(json_escape "$OPERATION_STATUS")" "$(json_escape "$OPERATION_MESSAGE")" \
     "$port_json" "$(bool "$INJECTOR_ALIVE")" "$(bool "$CDP_OK")" "$(bool "$CODEX_RUNNING")" \

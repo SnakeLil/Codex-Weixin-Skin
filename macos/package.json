@@ -7,7 +7,8 @@
     "doctor": "./scripts/doctor-macos.sh",
     "check:source": "./scripts/check-source-macos.sh",
     "test:compatibility": "node --test tests/compatibility-contract.test.mjs",
-    "test": "npm run check:source && npm run test:compatibility"
+    "test:diagnostics": "node --test tests/diagnostics.test.mjs",
+    "test": "npm run check:source && npm run test:diagnostics && npm run test:compatibility"
   },
   "engines": {
     "node": ">=20"

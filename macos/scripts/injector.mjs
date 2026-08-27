@@ -148,6 +148,7 @@ function parseArgs(argv) {
     operationUiState: null,
     operationMessage: null,
     operationToken: null,
+    anonymousCheck: false,
   };
   for (let i = 0; i < argv.length; i += 1) {
     const arg = argv[i];
@@ -159,6 +160,7 @@ function parseArgs(argv) {
     else if (arg === "--begin-operation") options.mode = "begin-operation";
     else if (arg === "--finish-operation") options.mode = "finish-operation";
     else if (arg === "--check-payload") options.mode = "check";
+    else if (arg === "--anonymous-check") options.anonymousCheck = true;
     else if (arg === "--timeout-ms") options.timeoutMs = Number(argv[++i]);
     else if (arg === "--screenshot") options.screenshot = path.resolve(argv[++i]);
     else if (arg === "--theme-dir") options.themeDir = path.resolve(argv[++i]);
@@ -192,6 +194,9 @@ function parseArgs(argv) {
       || /[\r\n]/.test(options.operationMessage)) {
       throw new Error("Finish operation requires a single-line --operation-message up to 240 characters");
     }
+  }
+  if (options.anonymousCheck && options.mode !== "check") {
+    throw new Error("--anonymous-check requires --check-payload");
   }
   return options;
 }
@@ -1890,16 +1895,19 @@ if (path.resolve(process.argv[1] || "") === path.resolve(scriptPath)) {
     const options = parseArgs(process.argv.slice(2));
     if (options.mode === "check") {
       const loaded = await loadPayload(options.themeDir);
-      console.log(JSON.stringify({
+      const result = {
         pass: true,
         version: SKIN_VERSION,
-        themeId: loaded.theme.id,
-        themeName: loaded.theme.name,
         imageBytes: loaded.imageBytes,
         payloadBytes: Buffer.byteLength(loaded.payload),
-        artMetadata: loaded.theme.artMetadata ?? null,
-        timings: loaded.timings,
-      }, null, 2));
+      };
+      if (!options.anonymousCheck) {
+        result.themeId = loaded.theme.id;
+        result.themeName = loaded.theme.name;
+        result.artMetadata = loaded.theme.artMetadata ?? null;
+        result.timings = loaded.timings;
+      }
+      console.log(JSON.stringify(result, null, 2));
     } else if (options.mode === "begin-operation") {
       await runBeginOperation(options);
       await new Promise((resolve) => process.stdout.write("", resolve));

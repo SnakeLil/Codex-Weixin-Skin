@@ -24,6 +24,7 @@ It injects through **local‑loopback CDP**. It does **not** modify the official
 # Start / verify / restore via Desktop:
 #   Codex WeChat Skin.command
 #   Codex WeChat Skin - Customize.command
+#   Codex WeChat Skin - Diagnostics.command
 #   Codex WeChat Skin - Verify.command
 #   Codex WeChat Skin - Restore.command
 
@@ -41,6 +42,7 @@ It injects through **local‑loopback CDP**. It does **not** modify the official
 | `assets/portal-hero.png` | Default flat chat background |
 | `scripts/injector.mjs` | CDP engine: build payload, inject, verify, remove |
 | `scripts/common-macos.sh` | Shared paths, Codex discovery, launchd, safety checks |
+| `scripts/export-diagnostics-macos.sh` · `scripts/diagnostics.mjs` | Privacy-safe, read-only diagnostic ZIP export |
 | `scripts/*-weixin-skin-macos.sh` | install / start / restore / verify / status / pause |
 | `scripts/switch-theme-macos.sh` · `customize-theme-macos.sh` · `load-image-theme-macos.sh` | theme library + wallpaper import |
 | `presets/preset-wechat-*` | 微信 · 浅色 / 深色 |

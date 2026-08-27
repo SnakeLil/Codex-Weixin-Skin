@@ -94,6 +94,7 @@ The installer creates these Desktop launchers:
 | --- | --- |
 | **Codex WeChat Skin.command** | Start or re-apply the WeChat skin |
 | **Codex WeChat Skin - Customize.command** | Switch presets, edit colours, or load a chat wallpaper |
+| **Codex WeChat Skin - Diagnostics.command** | Export an anonymous diagnostic bundle without chat or account data |
 | **Codex WeChat Skin - Verify.command** | Verify the live skin and capture a screenshot |
 | **Codex WeChat Skin - Restore.command** | Remove the skin and restore the official appearance |
 
@@ -154,6 +155,16 @@ cd macos
 npm install
 npx playwright install chromium
 npm test
+```
+
+### Export anonymous diagnostics
+
+For installation, startup, or compatibility problems, double-click the Desktop **Codex WeChat Skin - Diagnostics.command** launcher. It creates a ZIP on the Desktop and reveals it in Finder. The bundle contains only OS/Codex/skin versions, read-only runtime status, payload integrity, and compatibility coverage. It excludes chat content, screenshots, raw logs, account data, custom theme names, and local paths, and it never connects to the active Codex debugging endpoint. The ZIP is safe to attach to a [Bug Issue](https://github.com/SnakeLil/Codex-Weixin-Skin/issues/new/choose).
+
+You can also export it from Terminal:
+
+```bash
+~/.codex/codex-weixin-skin-studio/scripts/export-diagnostics-macos.sh
 ```
 
 ## Restore / uninstall

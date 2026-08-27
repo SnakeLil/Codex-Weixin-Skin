@@ -82,18 +82,20 @@ if [ "$CREATE_LAUNCHERS" = "true" ]; then
   /bin/mkdir -p "$HOME/Desktop"
   start_script="$(shell_quote "$SCRIPT_DIR/start-weixin-skin-macos.sh")"
   customize_script="$(shell_quote "$SCRIPT_DIR/customize-theme-macos.sh")"
+  diagnostics_script="$(shell_quote "$SCRIPT_DIR/export-diagnostics-macos.sh")"
   verify_script="$(shell_quote "$SCRIPT_DIR/verify-weixin-skin-macos.sh")"
   restore_script="$(shell_quote "$SCRIPT_DIR/restore-weixin-skin-macos.sh")"
   screenshot="$(shell_quote "$HOME/Desktop/Codex WeChat Skin Verification.png")"
   write_launcher "$HOME/Desktop/Codex WeChat Skin.command" "exec $start_script --port $PORT --prompt-restart"
   write_launcher "$HOME/Desktop/Codex WeChat Skin - Customize.command" "exec $customize_script"
+  write_launcher "$HOME/Desktop/Codex WeChat Skin - Diagnostics.command" "output=\$($diagnostics_script) && /usr/bin/open -R \"\$output\""
   write_launcher "$HOME/Desktop/Codex WeChat Skin - Verify.command" "$verify_script --screenshot $screenshot && /usr/bin/open $screenshot"
   write_launcher "$HOME/Desktop/Codex WeChat Skin - Restore.command" "exec $restore_script --restore-base-theme --restart-codex"
 fi
 
 printf 'Codex WeChat Skin Studio %s installed at %s for Codex %s using its signed Node.js %s.\n' \
   "$SKIN_VERSION" "$PROJECT_ROOT" "$CODEX_VERSION" "$NODE_VERSION"
-printf 'Use the Desktop launchers to customize, start, verify, or restore the official appearance.\n'
+printf 'Use the Desktop launchers to customize, diagnose, start, verify, or restore the official appearance.\n'
 printf 'Bundled presets are ready in your theme library — pick one from the menu bar (已保存的主题) or switch-theme.\n'
 
 if [ "$LAUNCH_AFTER_INSTALL" = "true" ]; then

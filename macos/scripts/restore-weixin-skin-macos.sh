@@ -64,6 +64,7 @@ clear_operation_state
 if [ "$UNINSTALL" = "true" ]; then
   /bin/rm -f "$HOME/Desktop/Codex WeChat Skin.command"
   /bin/rm -f "$HOME/Desktop/Codex WeChat Skin - Customize.command"
+  /bin/rm -f "$HOME/Desktop/Codex WeChat Skin - Diagnostics.command"
   /bin/rm -f "$HOME/Desktop/Codex WeChat Skin - Verify.command"
   /bin/rm -f "$HOME/Desktop/Codex WeChat Skin - Restore.command"
 fi
