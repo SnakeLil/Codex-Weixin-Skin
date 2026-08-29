@@ -99,6 +99,52 @@ test("one-click installer builds as a signed universal app without launching it"
   }
 });
 
+test("release version is consistent across every distributable surface", async () => {
+  const version = (await fs.readFile(path.join(macosRoot, "VERSION"), "utf8")).trim();
+  assert.match(version, /^\d+\.\d+\.\d+$/);
+  const packageJson = JSON.parse(await fs.readFile(path.join(macosRoot, "package.json"), "utf8"));
+  const packageLock = JSON.parse(await fs.readFile(path.join(macosRoot, "package-lock.json"), "utf8"));
+  const lite = JSON.parse(await fs.readFile(
+    path.resolve(macosRoot, "..", "integrations", "codedrobe", "codex-wechat-skin-lite", "theme.json"),
+    "utf8",
+  ));
+  const evidence = JSON.parse(await fs.readFile(
+    path.join(macosRoot, "compatibility", "validated-builds.json"),
+    "utf8",
+  ));
+  const infoVersion = run("/usr/bin/plutil", [
+    "-extract", "CFBundleShortVersionString", "raw", "-o", "-",
+    path.join(macosRoot, "installer-app", "Info.plist"),
+  ]);
+  const infoBuild = run("/usr/bin/plutil", [
+    "-extract", "CFBundleVersion", "raw", "-o", "-",
+    path.join(macosRoot, "installer-app", "Info.plist"),
+  ]);
+  const common = await fs.readFile(path.join(macosRoot, "scripts", "common-macos.sh"), "utf8");
+  const injector = await fs.readFile(path.join(macosRoot, "scripts", "injector.mjs"), "utf8");
+  assert.deepEqual({
+    package: packageJson.version,
+    lock: packageLock.version,
+    lockRoot: packageLock.packages[""].version,
+    installerApp: infoVersion,
+    installerBuild: infoBuild,
+    runtimeShell: common.match(/^SKIN_VERSION="([^"]+)"/m)?.[1],
+    runtimeInjector: injector.match(/^const SKIN_VERSION = "([^"]+)";/m)?.[1],
+    lite: lite.version,
+    compatibilityEvidence: evidence.latest.themeVersion,
+  }, {
+    package: version,
+    lock: version,
+    lockRoot: version,
+    installerApp: version,
+    installerBuild: version.replaceAll(".", ""),
+    runtimeShell: version,
+    runtimeInjector: version,
+    lite: version,
+    compatibilityEvidence: version,
+  });
+});
+
 test("tag releases validate, test, verify, and checksum both distribution formats", async () => {
   const workflow = await fs.readFile(path.resolve(macosRoot, "..", ".github", "workflows", "release.yml"), "utf8");
   assert.match(workflow, /test "\$version" = "\$\(tr -d '\[:space:\]' < macos\/VERSION\)"/);
@@ -106,6 +152,7 @@ test("tag releases validate, test, verify, and checksum both distribution format
   assert.match(workflow, /build-installer-dmg-macos\.sh/);
   assert.match(workflow, /hdiutil verify/);
   assert.match(workflow, /Codex-Weixin-Skin-v\$\{version\}\.zip/);
+  assert.match(workflow, /cp README\.md README\.en\.md CHANGELOG\.md LICENSE/);
   assert.match(workflow, /shasum -a 256/);
   assert.match(workflow, /softprops\/action-gh-release@v2/);
 });

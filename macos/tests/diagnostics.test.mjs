@@ -58,7 +58,7 @@ test("invalid runtime values fail closed", () => {
 test("payload diagnostics omit custom theme identity and timing data", () => {
   const payload = sanitizePayloadCheck({
     pass: true,
-    version: "1.0.0",
+    version: "1.1.0",
     themeId: "customer-secret",
     themeName: "Secret Project",
     imageBytes: 4189,
@@ -67,7 +67,7 @@ test("payload diagnostics omit custom theme identity and timing data", () => {
   });
   assert.deepEqual(payload, {
     passed: true,
-    skinVersion: "1.0.0",
+    skinVersion: "1.1.0",
     imageBytes: 4189,
     payloadBytes: 94689,
   });
@@ -76,8 +76,8 @@ test("payload diagnostics omit custom theme identity and timing data", () => {
 test("generated report contains only anonymous, bounded diagnostics", () => {
   const report = buildDiagnosticReport({
     generatedAt: "2026-08-28T00:00:00.000Z",
-    skinVersion: "1.0.0",
-    codexVersion: "26.715.31925",
+    skinVersion: "1.1.0",
+    codexVersion: "26.820.60940",
     macosVersion: "15.5",
     architecture: "arm64",
     status: {
@@ -91,7 +91,7 @@ test("generated report contains only anonymous, bounded diagnostics", () => {
     },
     payload: {
       pass: true,
-      version: "1.0.0",
+      version: "1.1.0",
       imageBytes: 1,
       payloadBytes: 2,
       themeName: "Top Secret",

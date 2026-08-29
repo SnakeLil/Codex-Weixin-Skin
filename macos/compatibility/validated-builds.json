@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "latest": {
+    "themeVersion": "1.1.0",
+    "validatedOn": "2026-08-30",
+    "platform": {
+      "macOS": "15.5",
+      "architecture": "arm64"
+    },
+    "app": {
+      "name": "ChatGPT",
+      "bundleIdentifier": "com.openai.codex",
+      "version": "26.820.60940",
+      "build": "7119"
+    },
+    "sourceArtifact": {
+      "relativePath": "Contents/Resources/app.asar",
+      "sha256": "c964aebbf9a6a0f70799d01215c611d8ef6ee63f816b3d57beccddd47a811fd9"
+    },
+    "sourceScan": {
+      "status": "passed",
+      "requiredAnchors": [
+        "main-surface",
+        "session-sidebar",
+        "conversation-timeline",
+        "thread-footer",
+        "composer",
+        "search-dialog",
+        "command-root",
+        "command-input"
+      ]
+    },
+    "isolatedRegression": {
+      "status": "passed",
+      "runtime": "system Google Chrome in headless isolated mode",
+      "surfaces": [
+        "conversation",
+        "search",
+        "settings",
+        "sites",
+        "scheduled",
+        "plugins",
+        "pinned-summary"
+      ]
+    },
+    "liveUi": {
+      "status": "user-confirmed",
+      "automation": "none",
+      "notes": "The existing themed app remained running. Validation did not restart, launch, terminate, inject into, or connect to it."
+    }
+  }
+}

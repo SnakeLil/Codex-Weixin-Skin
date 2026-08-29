@@ -64,9 +64,9 @@ Lite 版适合快速体验；本仓库的完整版继续提供微信式三栏布
 | 项目 | 状态 |
 | --- | --- |
 | macOS | 12.0 或更高版本（跟随当前官方 Codex 应用要求） |
-| Apple Silicon | 已支持；v1.0.0 在 Apple Silicon + macOS 15.5 上验证 |
+| Apple Silicon | 已支持；v1.1.0 在 Apple Silicon + macOS 15.5 上验证 |
 | Intel Mac | 安装器包含架构自检，欢迎反馈实机结果 |
-| Codex Desktop | v1.0.0 已在 `26.715.31925` 上验证；应用更新后若出现异常请提交 Issue |
+| Codex Desktop | v1.1.0 已在 `26.820.60940`（build `7119`）上验证；详见[兼容证据](./docs/compatibility.md) |
 | Windows / Linux | 暂不支持 |
 
 “已验证”表示完成了真实界面测试，不代表主题仅能用于该版本。
@@ -79,7 +79,7 @@ Lite 版适合快速体验；本仓库的完整版继续提供微信式三栏布
 
 > GitHub Release 的社区 DMG 采用 ad-hoc 签名，尚未经过 Apple 公证。首次打开可能被 Gatekeeper 拦截；请右键安装器选择“打开”，或前往“系统设置 → 隐私与安全性 → 仍要打开”。这不是主题安装失败。
 
-如果当前 Release 只提供 ZIP，也可以下载 `Codex-Weixin-Skin-v1.0.0.zip` 并解压。开发者还可以使用 Git 克隆：
+Release 同时提供 `Codex-Weixin-Skin-v1.1.0.zip` 作为传统安装包。开发者也可以使用 Git 克隆：
 
 ```bash
 git clone https://github.com/SnakeLil/Codex-Weixin-Skin.git

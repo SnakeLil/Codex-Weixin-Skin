@@ -43,7 +43,7 @@ jobs:
           stage="$RUNNER_TEMP/Codex-Weixin-Skin-v${version}"
           mkdir -p "$stage"
           rsync -a --exclude node_modules --exclude release --exclude .DS_Store macos/ "$stage/macos/"
-          cp README.md README.en.md LICENSE "$stage/"
+          cp README.md README.en.md CHANGELOG.md LICENSE "$stage/"
           ditto --norsrc -c -k --keepParent "$stage" "$RUNNER_TEMP/Codex-Weixin-Skin-v${version}.zip"
           cd "$RUNNER_TEMP"
           shasum -a 256 "Codex-Weixin-Skin-v${version}.dmg" "Codex-Weixin-Skin-v${version}.zip" \

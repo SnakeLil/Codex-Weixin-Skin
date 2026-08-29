@@ -64,9 +64,9 @@ Only macOS is supported at this time. A Codex UI update may require correspondin
 | Item | Status |
 | --- | --- |
 | macOS | 12.0 or later, following the current official Codex app requirement |
-| Apple Silicon | Supported; v1.0.0 was verified on Apple Silicon with macOS 15.5 |
+| Apple Silicon | Supported; v1.1.0 was verified on Apple Silicon with macOS 15.5 |
 | Intel Mac | The installer includes architecture checks; real-device reports are welcome |
-| Codex Desktop | v1.0.0 was verified with `26.715.31925`; please report regressions after app updates |
+| Codex Desktop | v1.1.0 was verified with `26.820.60940` (build `7119`); see the [compatibility evidence](./docs/compatibility.md) |
 | Windows / Linux | Not supported yet |
 
 “Verified” describes the environment used for live UI testing; it is not an exclusive version requirement.
@@ -79,7 +79,7 @@ New releases prioritize `Codex-Weixin-Skin-vX.Y.Z.dmg`. Open the DMG, double-cli
 
 > Community DMGs from GitHub Releases are ad-hoc signed and not Apple-notarized. Gatekeeper may block the first launch; right-click the installer and choose **Open**, or use **System Settings → Privacy & Security → Open Anyway**. This does not mean theme installation failed.
 
-If the current [Release](https://github.com/SnakeLil/Codex-Weixin-Skin/releases/latest) only provides a ZIP, download and extract `Codex-Weixin-Skin-v1.0.0.zip`. Developers can also clone the repository:
+The Release also includes `Codex-Weixin-Skin-v1.1.0.zip` as the legacy package. Developers can alternatively clone the repository:
 
 ```bash
 git clone https://github.com/SnakeLil/Codex-Weixin-Skin.git

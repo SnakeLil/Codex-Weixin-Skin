@@ -1,5 +1,10 @@
 {
   "schemaVersion": 1,
+  "revalidatedAgainst": {
+    "appVersion": "26.820.60940",
+    "build": "7119",
+    "date": "2026-08-30"
+  },
   "pages": [
     { "id": "conversation", "file": "conversation.html", "viewport": { "width": 1280, "height": 800 }, "expectedActive": ["shell", "conversation"] },
     { "id": "search", "file": "search.html", "viewport": { "width": 1280, "height": 800 }, "expectedActive": ["shell", "conversation", "search"] },
